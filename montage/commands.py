@@ -84,7 +84,7 @@ def mAdd(images_table, template_header, out_image, img_dir=None,
     command += " " + str(out_image)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mAdd", p.stdout.read().strip())
+    return status.parse_struct("mAdd", p.stdout.read().strip())
 
 
 def mAddExec(images_table, template_header, tile_dir, out_image, img_dir=None,
@@ -166,7 +166,7 @@ def mAddExec(images_table, template_header, tile_dir, out_image, img_dir=None,
     command += " " + str(out_image)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mAddExec", p.stdout.read().strip())
+    return status.parse_struct("mAddExec", p.stdout.read().strip())
 
 
 def mArchiveExec(region_table, debug_level=None):
@@ -192,7 +192,7 @@ def mArchiveExec(region_table, debug_level=None):
     command += " " + str(region_table)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mArchiveExec", p.stdout.read().strip())
+    return status.parse_struct("mArchiveExec", p.stdout.read().strip())
 
 
 def mArchiveGet(remote_ref, local_file, debug=False, raw=False):
@@ -227,7 +227,7 @@ def mArchiveGet(remote_ref, local_file, debug=False, raw=False):
     command += " " + str(local_file)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mArchiveGet", p.stdout.read().strip())
+    return status.parse_struct("mArchiveGet", p.stdout.read().strip())
 
 
 def mArchiveList(survey, band, object_or_location, width, height, out_file):
@@ -268,7 +268,7 @@ def mArchiveList(survey, band, object_or_location, width, height, out_file):
     command += " " + str(out_file)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mArchiveList", p.stdout.read().strip())
+    return status.parse_struct("mArchiveList", p.stdout.read().strip())
 
 
 def mBestImage(images_table, ra, dec, debug_level=None):
@@ -301,7 +301,7 @@ def mBestImage(images_table, ra, dec, debug_level=None):
     command += " " + str(dec)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mBestImage", p.stdout.read().strip())
+    return status.parse_struct("mBestImage", p.stdout.read().strip())
 
 
 def mBgExec(images_table, corrections_table, corr_dir, proj_dir=None,
@@ -362,7 +362,7 @@ def mBgExec(images_table, corrections_table, corr_dir, proj_dir=None,
     command += " " + str(corr_dir)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mBgExec", p.stdout.read().strip())
+    return status.parse_struct("mBgExec", p.stdout.read().strip())
 
 
 def mBgModel(images_table, fits_table, corrections_table, n_iter=None,
@@ -420,7 +420,7 @@ def mBgModel(images_table, fits_table, corrections_table, n_iter=None,
     command += " " + str(corrections_table)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mBgModel", p.stdout.read().strip())
+    return status.parse_struct("mBgModel", p.stdout.read().strip())
 
 
 def mCatMap(in_table, out_image, template_header, column=None, ref_mag=None,
@@ -473,7 +473,7 @@ def mCatMap(in_table, out_image, template_header, column=None, ref_mag=None,
     command += " " + str(template_header)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mCatMap", p.stdout.read().strip())
+    return status.parse_struct("mCatMap", p.stdout.read().strip())
 
 
 def mConvert(in_image, out_image, debug_level=None, status_file=None,
@@ -542,7 +542,7 @@ def mConvert(in_image, out_image, debug_level=None, status_file=None,
     command += " " + str(out_image)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mConvert", p.stdout.read().strip())
+    return status.parse_struct("mConvert", p.stdout.read().strip())
 
 
 def mDiff(in_image_1, in_image_2, out_image, template_header,
@@ -597,7 +597,7 @@ def mDiff(in_image_1, in_image_2, out_image, template_header,
     command += " " + str(template_header)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mDiff", p.stdout.read().strip())
+    return status.parse_struct("mDiff", p.stdout.read().strip())
 
 
 def mDiffExec(diffs_table, template_header, diff_dir, proj_dir=None,
@@ -657,7 +657,7 @@ def mDiffExec(diffs_table, template_header, diff_dir, proj_dir=None,
     command += " " + str(diff_dir)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mDiffExec", p.stdout.read().strip())
+    return status.parse_struct("mDiffExec", p.stdout.read().strip())
 
 
 def mDiffFitExec(diffs_table, fits_table, diff_dir, debug=False,
@@ -698,7 +698,7 @@ def mDiffFitExec(diffs_table, fits_table, diff_dir, debug=False,
     command += " " + str(diff_dir)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mDiffFitExec", p.stdout.read().strip())
+    return status.parse_struct("mDiffFitExec", p.stdout.read().strip())
 
 
 def mExec(survey, band, raw_dir=None, n_tile_x=None, n_tile_y=None,
@@ -793,7 +793,7 @@ def mExec(survey, band, raw_dir=None, n_tile_x=None, n_tile_y=None,
         command += " %s" % str(workspace_dir)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mExec", p.stdout.read().strip())
+    return status.parse_struct("mExec", p.stdout.read().strip())
 
 
 def mFitExec(diffs_table, fits_table, diff_dir, debug=False, status_file=None,
@@ -845,7 +845,7 @@ def mFitExec(diffs_table, fits_table, diff_dir, debug=False, status_file=None,
     command += " " + str(diff_dir)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mFitExec", p.stdout.read().strip())
+    return status.parse_struct("mFitExec", p.stdout.read().strip())
 
 
 def mFitplane(in_image, border=None, debug_level=None, status_file=None):
@@ -880,7 +880,7 @@ def mFitplane(in_image, border=None, debug_level=None, status_file=None):
     command += " " + str(in_image)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mFitplane", p.stdout.read().strip())
+    return status.parse_struct("mFitplane", p.stdout.read().strip())
 
 
 def mFixNan(in_image, out_image, debug_level=None, nan_value=None,
@@ -922,7 +922,7 @@ def mFixNan(in_image, out_image, debug_level=None, nan_value=None,
         command += " %s" % str(max_blank)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mFixNan", p.stdout.read().strip())
+    return status.parse_struct("mFixNan", p.stdout.read().strip())
 
 
 def mFlattenExec(images_table, flat_dir, img_dir=None, debug=False,
@@ -967,7 +967,7 @@ def mFlattenExec(images_table, flat_dir, img_dir=None, debug=False,
     command += " " + str(flat_dir)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mFlattenExec", p.stdout.read().strip())
+    return status.parse_struct("mFlattenExec", p.stdout.read().strip())
 
 
 def mGetHdr(in_image, img_header, debug=False, hdu=None, status_file=None):
@@ -1006,7 +1006,7 @@ def mGetHdr(in_image, img_header, debug=False, hdu=None, status_file=None):
     command += " " + str(img_header)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mGetHdr", p.stdout.read().strip())
+    return status.parse_struct("mGetHdr", p.stdout.read().strip())
 
 
 def mHdr(object_or_location, width, out_file, system=None, equinox=None,
@@ -1061,7 +1061,7 @@ def mHdr(object_or_location, width, out_file, system=None, equinox=None,
     command += " " + str(out_file)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mHdr", p.stdout.read().strip())
+    return status.parse_struct("mHdr", p.stdout.read().strip())
 
 
 def mHdrCheck(in_image, status_file=None):
@@ -1089,7 +1089,7 @@ def mHdrCheck(in_image, status_file=None):
     command += " " + str(in_image)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mHdrCheck", p.stdout.read().strip())
+    return status.parse_struct("mHdrCheck", p.stdout.read().strip())
 
 
 def mHdrtbl(directory, images_table, recursive=False, corners=False,
@@ -1158,7 +1158,7 @@ def mHdrtbl(directory, images_table, recursive=False, corners=False,
     command += " " + str(images_table)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mHdrtbl", p.stdout.read().strip())
+    return status.parse_struct("mHdrtbl", p.stdout.read().strip())
 
 
 def mImgtbl(directory, images_table, recursive=False, corners=False,
@@ -1248,7 +1248,7 @@ def mImgtbl(directory, images_table, recursive=False, corners=False,
     command += " " + str(images_table)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mImgtbl", p.stdout.read().strip())
+    return status.parse_struct("mImgtbl", p.stdout.read().strip())
 
 
 def mMakeHdr(images_table, template_header, debug_level=None,
@@ -1310,7 +1310,7 @@ def mMakeHdr(images_table, template_header, debug_level=None,
         command += " %s" % str(equinox)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mMakeHdr", p.stdout.read().strip())
+    return status.parse_struct("mMakeHdr", p.stdout.read().strip())
 
 
 def mOverlaps(images_table, diffs_table, exact=False, debug_level=None,
@@ -1359,7 +1359,7 @@ def mOverlaps(images_table, diffs_table, exact=False, debug_level=None,
     command += " " + str(diffs_table)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mOverlaps", p.stdout.read().strip())
+    return status.parse_struct("mOverlaps", p.stdout.read().strip())
 
 
 def mPix2Coord(template_header, ixpix, jypix, debug=False):
@@ -1392,7 +1392,7 @@ def mPix2Coord(template_header, ixpix, jypix, debug=False):
     command += " " + str(jypix)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mPix2Coord", p.stdout.read().strip())
+    return status.parse_struct("mPix2Coord", p.stdout.read().strip())
 
 
 def mProject(in_image, out_image, template_header, factor=None,
@@ -1480,7 +1480,7 @@ def mProject(in_image, out_image, template_header, factor=None,
     command += " " + str(template_header)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mProject", p.stdout.read().strip())
+    return status.parse_struct("mProject", p.stdout.read().strip())
 
 
 def mProjectPP(in_image, out_image, template_header, factor=None,
@@ -1578,7 +1578,7 @@ def mProjectPP(in_image, out_image, template_header, factor=None,
     command += " " + str(template_header)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mProjectPP", p.stdout.read().strip())
+    return status.parse_struct("mProjectPP", p.stdout.read().strip())
 
 
 def mProjExec(images_table, template_header, proj_dir, stats_table,
@@ -1673,7 +1673,7 @@ def mProjExec(images_table, template_header, proj_dir, stats_table,
     command += " " + str(stats_table)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mProjExec", p.stdout.read().strip())
+    return status.parse_struct("mProjExec", p.stdout.read().strip())
 
 
 def mPutHdr(in_image, out_image, template_header, debug=False,
@@ -1716,7 +1716,7 @@ def mPutHdr(in_image, out_image, template_header, debug=False,
     command += " " + str(template_header)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mPutHdr", p.stdout.read().strip())
+    return status.parse_struct("mPutHdr", p.stdout.read().strip())
 
 
 def mRotate(in_image, out_image, debug_level=None, status_file=None,
@@ -1770,7 +1770,7 @@ def mRotate(in_image, out_image, debug_level=None, status_file=None,
         command += " %s" % str(ysize)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mRotate", p.stdout.read().strip())
+    return status.parse_struct("mRotate", p.stdout.read().strip())
 
 
 def mShrink(in_image, out_image, factor, fixed_size=False, debug_level=None,
@@ -1816,7 +1816,7 @@ def mShrink(in_image, out_image, factor, fixed_size=False, debug_level=None,
     command += " " + str(factor)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mShrink", p.stdout.read().strip())
+    return status.parse_struct("mShrink", p.stdout.read().strip())
 
 
 def mSubset(images_table, template_header, subset_table, debug_level=None,
@@ -1863,7 +1863,7 @@ def mSubset(images_table, template_header, subset_table, debug_level=None,
     command += " " + str(subset_table)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mSubset", p.stdout.read().strip())
+    return status.parse_struct("mSubset", p.stdout.read().strip())
 
 
 def mTANHdr(orig_header, new_header, debug=False, order=None, max_iter=None,
@@ -1917,7 +1917,7 @@ def mTANHdr(orig_header, new_header, debug=False, order=None, max_iter=None,
     command += " " + str(new_header)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mTANHdr", p.stdout.read().strip())
+    return status.parse_struct("mTANHdr", p.stdout.read().strip())
 
 
 def mTblSort(in_table, column_name, out_table, debug=False):
@@ -1948,7 +1948,7 @@ def mTblSort(in_table, column_name, out_table, debug=False):
     command += " " + str(out_table)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mTblSort", p.stdout.read().strip())
+    return status.parse_struct("mTblSort", p.stdout.read().strip())
 
 
 def mTileHdr(orig_header, new_header, n_x, n_y, ix, iy, debug=False,
@@ -2013,4 +2013,5 @@ def mTileHdr(orig_header, new_header, n_x, n_y, ix, iy, debug=False,
         command += " %s" % str(ypad)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    return status.Struct("mTileHdr", p.stdout.read().strip())
+    return status.parse_struct("mTileHdr", p.stdout.read().strip())
+

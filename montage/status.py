@@ -12,6 +12,13 @@ class MontageError(Exception):
     pass
 
 
+def parse_struct(command, string):
+    if "\n" in string:
+        return [Struct(command, substring) for substring in string.split('\n')]
+    else:
+        return Struct(command, string)
+
+
 class Struct(object):
 
     def __init__(self, command, string):
