@@ -41,5 +41,8 @@ class Struct(object):
 
             if self.stat == "ERROR":
                 raise MontageError("%s: %s" % (command, self.msg))
+            elif self.stat == "WARNING":
+                print "WARNING: %s" % self.msg
+
         else:
             raise Exception("The following error occured:\n\n" + string)
