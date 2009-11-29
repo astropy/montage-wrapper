@@ -13,43 +13,55 @@ class MontageError(Exception):
 
 
 def parse_struct(command, string):
+
     if "\n" in string:
-        return [Struct(command, substring) for substring in string.split('\n')]
+        result = []
+        for substring in string.split('\n'):
+            if 'struct' in substring:
+                result.append(Struct(command, substring))
+            else:
+                print substring
     else:
-        return Struct(command, string)
+        if 'struct' in string:
+            result = Struct(command, string)
+        else:
+            print string
+            result = None
+
+    if result:
+        return result
+    else:
+        return
 
 
 class Struct(object):
 
     def __init__(self, command, string):
-        if 'struct' in string:
-            string = string[8:-1]
 
-            strings = {}
-            while True:
-                try:
-                    p1 = string.index('"')
-                    p2 = string.index('"', p1+1)
-                    substring = string[p1+1:p2]
-                    key = hashlib.md5(substring).hexdigest()
-                    strings[key] = substring
-                    string = string[:p1] + key + string[p2+1:]
-                except:
-                    break
+        string = string[8:-1]
 
-            key = hashlib.md5(substring).hexdigest()
+        strings = {}
+        while True:
+            try:
+                p1 = string.index('"')
+                p2 = string.index('"', p1+1)
+                substring = string[p1+1:p2]
+                key = hashlib.md5(substring).hexdigest()
+                strings[key] = substring
+                string = string[:p1] + key + string[p2+1:]
+            except:
+                break
 
-            for pair in string.split(', '):
-                key, value = pair.split('=')
-                if value in strings:
-                    self.__dict__[key] = strings[value]
-                else:
-                    self.__dict__[key] = simplify(value)
+        key = hashlib.md5(substring).hexdigest()
 
-            if self.stat == "ERROR":
-                raise MontageError("%s: %s" % (command, self.msg))
-            elif self.stat == "WARNING":
-                print "WARNING: %s" % self.msg
+        for pair in string.split(', '):
+            key, value = pair.split('=')
+            if value in strings:
+                self.__dict__[key] = strings[value]
+            else:
+                self.__dict__[key] = simplify(value)
 
-        else:
-            raise Exception("The following error occured:\n\n" + string)
+        if self.stat == "ERROR":
+            raise MontageError("%s: %s" % (command, self.msg))
+        elif self.stat == "WARNING":
+            print "WARNING: %s" % self.msg
