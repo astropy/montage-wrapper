@@ -2,8 +2,8 @@ import os
 import random
 import string
 
-import pymontage.commands as m
-from pymontage.status import MontageError
+import commands as m
+from status import MontageError
 
 
 def _make_work_dir():
