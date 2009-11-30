@@ -141,7 +141,7 @@ def reproject(in_image, out_image, bitpix=None, north_aligned=False,
     return
 
 
-def mosaic(input_dir, output_dir, header=None, mpi=False,
+def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
     background_match=False, imglist=None, combine="mean", exact_size=False,
     cleanup=True):
 
@@ -194,7 +194,7 @@ def mosaic(input_dir, output_dir, header=None, mpi=False,
     # Projecting raw frames
     print "Projecting raw frames"
     m.mProjExec('images_raw.tbl', 'header.hdr', 'projected', 'stats.tbl',
-                    raw_dir='raw', mpi=mpi)
+                    raw_dir='raw', mpi=mpi, n_proc=n_proc)
 
     # List projected frames
     m.mImgtbl('projected', 'images_projected.tbl')
@@ -206,7 +206,7 @@ def mosaic(input_dir, output_dir, header=None, mpi=False,
         print "Modeling background"
         m.mOverlaps('images_projected.tbl', 'diffs.tbl')
         m.mDiffExec('diffs.tbl', 'header.hdr', 'diffs', proj_dir='projected',
-                    mpi=mpi)
+                    mpi=mpi, n_proc=n_proc)
         m.mFitExec('diffs.tbl', 'fits.tbl', 'diffs')
         m.mBgModel('images_projected.tbl', 'fits.tbl', 'corrections.tbl',
                     n_iter=32767, level_only=True)
