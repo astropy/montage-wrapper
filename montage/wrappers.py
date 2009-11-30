@@ -56,7 +56,7 @@ except:
 
 
 def reproject(in_image, out_image, bitpix=None, north_aligned=False,
-    system=None, equinox=None, factor=None):
+    system=None, equinox=None, factor=None, cleanup=True):
     '''
     Reproject an image
 
@@ -130,15 +130,20 @@ def reproject(in_image, out_image, bitpix=None, north_aligned=False,
     # Go to start directory
     os.chdir(start_dir)
 
-    # Deleting work directory
-    print "Deleting work directory " + work_dir
-    os.system("rm -r " + work_dir)
+    if cleanup:
+        # Deleting work directory
+        print "Deleting work directory %s" % work_dir
+        os.system("rm -r " + work_dir)
+    else:
+        # Leave work directory as it is
+        print "Leaving work directory %s" % work_dir
 
     return
 
 
 def mosaic(input_dir, output_dir, header=None, mpi=False,
-    background_match=False, imglist=None, combine="mean", exact_size=False):
+    background_match=False, imglist=None, combine="mean", exact_size=False,
+    cleanup=True):
 
     assert combine=='mean' or combine=='median' or combine=='count', \
             "combine should be one of mean/median/count"
@@ -240,8 +245,12 @@ def mosaic(input_dir, output_dir, header=None, mpi=False,
     # Go to start directory
     os.chdir(start_dir)
 
-    # Deleting work directory
-    print "Deleting work directory "+work_dir
-    os.system("rm -r " + work_dir)
+    if cleanup:
+        # Deleting work directory
+        print "Deleting work directory %s" % work_dir
+        os.system("rm -r " + work_dir)
+    else:
+        # Leave work directory as it is
+        print "Leaving work directory %s" % work_dir
 
     return
