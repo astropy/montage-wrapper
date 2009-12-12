@@ -286,6 +286,115 @@ def mArchiveList(survey, band, object_or_location, width, height, out_file):
     return status.parse_struct("mArchiveList", p.stdout.read().strip())
 
 
+def mBackground(in_image, out_image, A, B, C, debug_level=None, no_area=False,
+          status_file=None):
+    '''
+    Remove a background plane from a FITS image.  The background correction
+    applied to the image is specified as Ax+By+C, where (x,y) is the pixel
+    coordinate using the image center as the origin, and (A,B,C) are the
+    background plane parameters specified as linear coefficients. To run in
+    'table' mode, see mBackground_tab.
+
+    Required Arguments:
+
+        *in_image* [ value ]
+            Input FITS file
+
+        *out_image* [ value ]
+            Output FITS file
+
+        *A, B, C* [ value ]
+            Corrections (as given by mFitplane or mFitExec)
+
+    Optional Arguments:
+
+        *debug_level* [ value ]
+            Turns on debugging to the specified level.
+
+        *no_area* [ True | False ]
+            Indicates that no area images are present (assumes equal weighting
+            for each data pixel)
+
+        *status_file* [ value ]
+            mBackground output and errors will be written to status_file
+            instead of stdout.
+    '''
+    command = "mBackground"
+    if debug_level:
+        command += " -d %s" % str(debug_level)
+    if no_area:
+        command += " -n"
+    if status_file:
+        command += " -s %s" % str(status_file)
+    command += " " + str(in_image)
+    command += " " + str(out_image)
+    command += " " + str(A)
+    command += " " + str(B)
+    command += " " + str(C)
+    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
+    stderr = p.stderr.read()
+    if stderr:
+        raise Exception(stderr)
+    return status.parse_struct("mBackground", p.stdout.read().strip())
+
+
+def mBackground_tab(in_image, out_image, images_table, corrections_table,
+          debug_level=None, no_area=False, status_file=None):
+    '''
+    Remove a background plane from a FITS image.  The background correction
+    applied to the image is specified as Ax+By+C, where (x,y) is the pixel
+    coordinate using the image center as the origin, and (A,B,C) are the
+    background plane parameters specified as linear coefficients. This method
+    runs mBackground_tab in 'table' mode.
+
+    Required Arguments:
+
+        *in_image* [ value ]
+            Input FITS file
+
+        *out_image* [ value ]
+            Output FITS file
+
+        *images_table* [ value ]
+            Image metadata table to retrieve the filenames of images.
+
+        *corrections_table* [ value ]
+            Table of corrections (from mFitplane and mFitExec) to apply to the
+            corresponding image (from images_table).
+
+    Optional Arguments:
+
+        *debug_level* [ value ]
+            Turns on debugging to the specified level.
+
+        *no_area* [ True | False ]
+            Indicates that no area images are present (assumes equal weighting
+            for each data pixel)
+
+        *status_file* [ value ]
+            mBackground_tab output and errors will be written to status_file
+            instead of stdout.
+    '''
+    command = "mBackground_tab"
+    if debug_level:
+        command += " -d %s" % str(debug_level)
+    if no_area:
+        command += " -n"
+    if status_file:
+        command += " -s %s" % str(status_file)
+    command += " " + str(in_image)
+    command += " " + str(out_image)
+    command += " " + str(images_table)
+    command += " " + str(corrections_table)
+    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
+    stderr = p.stderr.read()
+    if stderr:
+        raise Exception(stderr)
+    return status.parse_struct("mBackground_tab", p.stdout.read().strip())
+
+
 def mBestImage(images_table, ra, dec, debug_level=None):
     '''
     Given a list of images and a position on the sky, determine which image
