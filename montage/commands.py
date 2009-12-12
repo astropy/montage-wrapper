@@ -1484,8 +1484,8 @@ def mMakeHdr(images_table, template_header, debug_level=None,
     command += " " + str(template_header)
     if system:
         command += " %s" % str(system)
-    if equinox:
-        command += " %s" % str(equinox)
+        if equinox:
+            command += " %s" % str(equinox)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
@@ -1950,7 +1950,8 @@ def mRotate(in_image, out_image, debug_level=None, status_file=None,
 
         *ysize* [ value ]
             Height (in degrees) of output image, if a new center location and
-            width are provided. Optional - defaults to xsize.
+            width are provided. Only used if ra, dec, and xsize are specified.
+            Defaults to xsize.
     '''
     command = "mRotate"
     if debug_level:
@@ -1965,8 +1966,8 @@ def mRotate(in_image, out_image, debug_level=None, status_file=None,
         command += " %s" % str(ra)
         command += " %s" % str(dec)
         command += " %s" % str(xsize)
-    if ysize:
-        command += " %s" % str(ysize)
+        if ysize:
+            command += " %s" % str(ysize)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
@@ -2326,12 +2327,12 @@ def mTileHdr(orig_header, new_header, n_x, n_y, ix, iy, debug=False,
             Output and errors are sent to status_file instead of to stdout
 
         *xpad* [ value ]
-            Number of pixels to overlap tiles in the x direction (optional;
-            default is 0)
+            Number of pixels to overlap tiles in the x direction (default is
+            0)
 
         *ypad* [ value ]
-            Number of pixels to overlap tiles in the y direction (optional;
-            default is 0)
+            Number of pixels to overlap tiles in the y direction (default is
+            0). Only used if xpad is present.
     '''
     command = "mTileHdr"
     if debug:
@@ -2346,8 +2347,8 @@ def mTileHdr(orig_header, new_header, n_x, n_y, ix, iy, debug=False,
     command += " " + str(iy)
     if xpad:
         command += " %s" % str(xpad)
-    if ypad:
-        command += " %s" % str(ypad)
+        if ypad:
+            command += " %s" % str(ypad)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
