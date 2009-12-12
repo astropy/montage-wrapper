@@ -1915,6 +1915,129 @@ def mShrink(in_image, out_image, factor, fixed_size=False, debug_level=None,
     return status.parse_struct("mShrink", p.stdout.read().strip())
 
 
+def mSubimage(in_image, out_image, ra, dec, xsize, debug=False,
+          all_pixels=False, hdu=None, status_file=None, ysize=None):
+    '''
+    Creates a subimage (or "cutout") of a FITS file. To use mSubimage in
+    'pixel' mode, see mSubimage_pix
+
+    Required Arguments:
+
+        *in_image* [ value ]
+            Input FITS file.
+
+        *out_image* [ value ]
+            Path to output FITS file.
+
+        *ra* [ value ]
+            RA of center of output image.
+
+        *dec* [ value ]
+            Declination of center of output image.
+
+        *xsize* [ value ]
+            Width of output image in degrees.
+
+    Optional Arguments:
+
+        *debug* [ True | False ]
+            Turns on debugging.
+
+        *all_pixels* [ True | False ]
+            All pixels - Force retrieval of whole image (useful to extract an
+            entire HDU)
+
+        *hdu* [ value ]
+            Operate on the specified FITS header extension (HDU)
+
+        *status_file* [ value ]
+            Output and errors are sent to status_file instead of to stdout
+
+        *ysize* [ value ]
+            Height of output image in degrees (default is equal to xsize.
+    '''
+    command = "mSubimage"
+    if debug:
+        command += " -d"
+    if all_pixels:
+        command += " -a"
+    if hdu:
+        command += " -h %s" % str(hdu)
+    if status_file:
+        command += " -s %s" % str(status_file)
+    command += " " + str(in_image)
+    command += " " + str(out_image)
+    command += " " + str(ra)
+    command += " " + str(dec)
+    command += " " + str(xsize)
+    if ysize:
+        command += " %s" % str(ysize)
+    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
+    stderr = p.stderr.read()
+    if stderr:
+        raise Exception(stderr)
+    return status.parse_struct("mSubimage", p.stdout.read().strip())
+
+
+def mSubimage_pix(in_image, out_image, xstartpix, ystartpix, xpixsize,
+          debug=False, hdu=None, status_file=None, ypixsize=None):
+    '''
+    Creates a subimage (or "cutout") of a FITS file ('pixel' mode)
+
+    Required Arguments:
+
+        *in_image* [ value ]
+            Input FITS file.
+
+        *out_image* [ value ]
+            Path to output FITS file.
+
+        *xstartpix* [ value ]
+            Pixel along the x-axis where the cutout image will begin
+
+        *ystartpix* [ value ]
+            Pixel along the y-axis where the cutout image will begin
+
+        *xpixsize* [ value ]
+            Width of output image in pixels
+
+    Optional Arguments:
+
+        *debug* [ True | False ]
+            Turns on debugging.
+
+        *hdu* [ value ]
+            Operate on the specified FITS header extension (HDU)
+
+        *status_file* [ value ]
+            Output and errors are sent to status_file instead of to stdout
+
+        *ypixsize* [ value ]
+            Height of output image in pixels (default is equal to xpix_size
+    '''
+    command = "mSubimage_pix"
+    if debug:
+        command += " -d"
+    if hdu:
+        command += " -h %s" % str(hdu)
+    if status_file:
+        command += " -s %s" % str(status_file)
+    command += " " + str(in_image)
+    command += " " + str(out_image)
+    command += " " + str(xstartpix)
+    command += " " + str(ystartpix)
+    command += " " + str(xpixsize)
+    if ypixsize:
+        command += " %s" % str(ypixsize)
+    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
+    stderr = p.stderr.read()
+    if stderr:
+        raise Exception(stderr)
+    return status.parse_struct("mSubimage_pix", p.stdout.read().strip())
+
+
 def mSubset(images_table, template_header, subset_table, debug_level=None,
           fast_mode=False, status_file=None):
     '''
