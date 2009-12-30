@@ -65,3 +65,9 @@ class Struct(object):
             raise MontageError("%s: %s" % (command, self.msg))
         elif self.stat == "WARNING":
             print "WARNING: %s" % self.msg
+
+    def __repr__(self):
+        string = ""
+        for item in self.__dict__:
+            string += item + " : " + str(self.__dict__[item]) + "\n"
+        return string[:-1]
