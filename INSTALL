@@ -1,0 +1,12 @@
+INTRODUCTION
+
+  Python-montage requires Montage to be installed:
+  
+    http://montage.ipac.caltech.edu
+
+INSTALLING
+
+  To install python-montage, run
+
+    python setup.py install
+
