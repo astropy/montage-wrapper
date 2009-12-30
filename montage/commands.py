@@ -232,7 +232,7 @@ def mArchiveGet(remote_ref, local_file, debug=False, raw=False):
         command += " -d"
     if raw:
         command += " -r"
-    command += " '" + str(remote_ref) + "'"
+    command += ' "' + str(remote_ref) + '"'
     command += " " + str(local_file)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
@@ -274,7 +274,7 @@ def mArchiveList(survey, band, object_or_location, width, height, out_file):
     command = "mArchiveList"
     command += " " + str(survey)
     command += " " + str(band)
-    command += " '" + str(object_or_location) + "'"
+    command += ' "' + str(object_or_location) + '"'
     command += " " + str(width)
     command += " " + str(height)
     command += " " + str(out_file)
@@ -1222,7 +1222,7 @@ def mHdr(object_or_location, width, out_file, system=None, equinox=None,
         command += " -p %s" % str(pix_size)
     if rotation:
         command += " -r %s" % str(rotation)
-    command += " '" + str(object_or_location) + "'"
+    command += ' "' + str(object_or_location) + '"'
     command += " " + str(width)
     command += " " + str(out_file)
     p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
