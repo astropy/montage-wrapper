@@ -241,6 +241,21 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
     # Make work directory
     work_dir = _make_work_dir()
 
+    images_raw_tbl = work_dir + 'images_raw.tbl'
+    images_projected_tbl = work_dir + 'images_projected.tbl'
+    images_corrected_tbl = work_dir + 'images_corrected.tbl'
+    corrections_tbl = work_dir + 'corrections.tbl'
+    diffs_tbl = work_dir + 'diffs.tbl'
+    stats_tbl = work_dir + 'stats.tbl'
+    fits_tbl = work_dir + 'fits.tbl'
+
+    raw_dir = work_dir + 'raw'
+    projected_dir = work_dir + 'projected'
+    corrected_dir = work_dir + 'corrected'
+    diffs_dir = work_dir + 'diffs'
+
+    header_hdr = work_dir + 'header.hdr'
+
     # Find path to header file if specified
     if header:
         header = os.path.abspath(header)
@@ -256,80 +271,69 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
         os.mkdir(output_dir)
 
     # Create symbolic links
-    os.symlink(input_dir, work_dir + 'raw')
+    os.symlink(input_dir, raw_dir)
 
     if header:
-        os.symlink(header, work_dir + 'header.hdr')
-
-    if imglist:
-        os.symlink(imglist, work_dir + 'imglist')
+        os.symlink(header, header_hdr)
 
     # Create temporary directories for Montage
-    os.mkdir(work_dir + 'projected')
+    os.mkdir(projected_dir)
     if background_match:
-        os.mkdir(work_dir + 'diffs')
-        os.mkdir(work_dir + 'corrected')
+        os.mkdir(diffs_dir)
+        os.mkdir(corrected_dir)
 
     # List frames to mosaic
     print "Listing raw frames"
-    m.mImgtbl(work_dir + 'raw', work_dir + 'images_raw.tbl', img_list=imglist)
+    m.mImgtbl(raw_dir, images_raw_tbl, img_list=imglist)
 
     # Compute header if needed
     if not header:
         print "Computing optimal header"
-        m.mMakeHdr(work_dir + 'images_raw.tbl', work_dir + 'header.hdr')
-
+        m.mMakeHdr(images_raw_tbl, header_hdr)
 
     # Projecting raw frames
     print "Projecting raw frames"
-    m.mProjExec(work_dir + 'images_raw.tbl', work_dir + 'header.hdr',
-                work_dir + 'projected', work_dir + 'stats.tbl',
-                raw_dir=work_dir + 'raw', mpi=mpi, n_proc=n_proc)
+    m.mProjExec(images_raw_tbl, header_hdr, projected_dir, stats_tbl,
+                raw_dir=raw_dir, mpi=mpi, n_proc=n_proc)
 
     # List projected frames
-    m.mImgtbl(work_dir + 'projected', work_dir + 'images_projected.tbl')
+    m.mImgtbl(projected_dir, images_projected_tbl)
 
     if background_match:
 
         # Modeling background
 
         print "Modeling background"
-        m.mOverlaps(work_dir + 'images_projected.tbl', work_dir + 'diffs.tbl')
-        m.mDiffExec(work_dir + 'diffs.tbl', work_dir + 'header.hdr',
-                    work_dir + 'diffs', proj_dir=work_dir + 'projected',
+        m.mOverlaps(images_projected_tbl, diffs_tbl)
+        m.mDiffExec(diffs_tbl, header_hdr, diffs_dir, proj_dir=projected_dir,
                     mpi=mpi, n_proc=n_proc)
-        m.mFitExec(work_dir + 'diffs.tbl', work_dir + 'fits.tbl',
-                   work_dir + 'diffs')
-        m.mBgModel(work_dir + 'images_projected.tbl', work_dir + 'fits.tbl',
-                   work_dir + 'corrections.tbl', n_iter=32767,
-                   level_only=True)
+        m.mFitExec(diffs_tbl, fits_tbl, diffs_dir)
+        m.mBgModel(images_projected_tbl, fits_tbl, corrections_tbl,
+                   n_iter=32767, level_only=True)
 
         # Matching background
         print "Matching background"
-        m.mBgExec(work_dir + 'images_projected.tbl',
-                  work_dir + 'corrections.tbl', work_dir + 'corrected',
-                  proj_dir=work_dir + 'projected')
-        sh.copy(work_dir + 'corrections.tbl', output_dir)
+        m.mBgExec(images_projected_tbl, corrections_tbl, corrected_dir,
+                  proj_dir=projected_dir)
+        sh.copy(corrections_tbl, output_dir)
 
         # Mosaicking frames
         print "Mosaicking BCD frames"
 
-        m.mImgtbl(work_dir + 'corrected', work_dir + 'images_corrected.tbl')
-        m.mAdd(work_dir + 'images_corrected.tbl', work_dir + 'header.hdr',
-               output_dir + 'mosaic64.fits', img_dir=work_dir + 'corrected',
-               type=combine, exact=exact_size)
-        sh.copy(work_dir + 'images_projected.tbl', output_dir)
-        sh.copy(work_dir + 'images_corrected.tbl', output_dir)
+        m.mImgtbl(corrected_dir, images_corrected_tbl)
+        m.mAdd(images_corrected_tbl, header_hdr, output_dir + 'mosaic64.fits',
+               img_dir=corrected_dir, type=combine, exact=exact_size)
+        sh.copy(images_projected_tbl, output_dir)
+        sh.copy(images_corrected_tbl, output_dir)
 
     else:
 
         # Mosaicking frames
         print "Mosaicking BCD frames"
 
-        m.mAdd(work_dir + 'images_projected.tbl', work_dir + 'header.hdr',
-                output_dir + 'mosaic64.fits', img_dir=work_dir + 'projected',
-                type=combine, exact=exact_size)
-        sh.copy(work_dir + 'images_projected.tbl', output_dir)
+        m.mAdd(images_projected_tbl, header_hdr, output_dir + 'mosaic64.fits',
+               img_dir=projected_dir, type=combine, exact=exact_size)
+        sh.copy(images_projected_tbl, output_dir)
 
     m.mConvert(output_dir + 'mosaic64.fits', output_dir + 'mosaic.fits',
                bitpix=bitpix)
