@@ -2,6 +2,7 @@ import os
 import shutil as sh
 import random
 import string
+import warnings
 
 import commands as m
 from status import MontageError
@@ -19,6 +20,17 @@ def _make_work_dir():
     os.mkdir(work_dir)
 
     return work_dir + "/"
+
+
+def _finalize(cleanup, work_dir):
+    if cleanup:
+        # Deleting work directory
+        print "Deleting work directory %s" % work_dir
+        os.system("rm -r " + work_dir)
+    else:
+        # Leave work directory as it is
+        print "Leaving work directory %s" % work_dir
+
 
 try:
 
@@ -56,20 +68,49 @@ except:
     pass
 
 
-def reproject(in_image, out_image, bitpix=None, north_aligned=False,
-    system=None, equinox=None, factor=None, cleanup=True):
+def mProject_auto(*args, **kwargs):
     '''
-    Reproject an image
+    Run mProject, automatically selecting whether to run mProject or
+    mProjectPP if possible (fast plane-to-plane projection). For details on
+    required and optional arguments, see help(mProject).
+    '''
+    try:
+        m.mProjectPP(*args, **kwargs)
+    except MontageError:
+        m.mProject(*args, **kwargs)
+
+
+def reproject(in_images, out_images, header=None, bitpix=None,
+    north_aligned=False, system=None, equinox=None, factor=None, common=False,
+    exact_size=False, cleanup=True):
+    '''
+    General-purpose reprojection routine.
+
+    If one input/output image is specified, and the header argument is set,
+    the routine is equivalent to using mProject or mProjectPP. If header= is
+    not set, a new header is computed by taking into account the
+    north_aligned, system, and equinox arguments (if set).
+
+    If tuples of input/output images are specified, the tuples need to have
+    the same number of elements. If header= is specified, all images are
+    projected to this common projection. If header= is not specified, then a
+    new header is computed a new header is computed by taking into account the
+    north_aligned, system, and equinox arguments (if set). If common=False,
+    then a header is computed for each individual image, whereas if
+    common=True, an optimal header is computed for all images.
 
     Required Arguments
 
-        *in_image* [ string ]
-            Input FITS file to be reprojected.
+        *in_images* [ string | tuple or list of strings ]
+            Path(s) of input FITS file(s) to be reprojected.
 
-        *out_image* [ string ]
-            Path of output FITS file to be created.
+        *out_images* [ string | tuple or list of strings ]
+            Path(s) of output FITS file(s) to be created.
 
     Optional Arguments
+
+        *header* [ string ]
+            Path to the header file to use for re-projection.
 
         *bitpix* [ value ]
             BITPIX value for the ouput FITS file (default is -64). Possible
@@ -90,43 +131,98 @@ def reproject(in_image, out_image, bitpix=None, north_aligned=False,
 
         *factor* [ value ]
             Drizzle factor (see mProject)
+
+        *exact_size* [ True | False ]
+            Whether to reproject the image(s) to the exact header specified
+            (i.e. whether cropping is unacceptable).
+
+    Optional Arguments (multiple files only)
+
+        *common* [ string ]
+            Compute a common optimal header for all images (only used if
+            header=None)
     '''
 
+    if type(in_images) == str and type(out_images) == str:
+        in_images = (in_images, )
+        out_images = (out_images, )
+    elif type(in_images) in [tuple, list] and type(out_images) in [tuple, list]:
+        pass
+    else:
+        raise Exception("Inconsistent type for in_images (%s) and out_images (%s)" % (type(in_images), type(out_images)))
+
+    if header:
+        if north_aligned or system or equinox:
+            warnings.warn("header= is set, so north_aligned=, system=, and equinox= will be ignored")
+
+    if common and len(in_images) == 1:
+        warnings.warn("only one image is being reprojected, so common= will be ignored")
+
     # Find path to input and output file
-    in_image = os.path.abspath(in_image)
-    out_image = os.path.abspath(out_image)
+    in_images = [os.path.abspath(in_image) for in_image in in_images]
+    out_images = [os.path.abspath(out_image) for out_image in out_images]
+
+    if len(in_images) > 1 and not header and not common:
+        for i, in_image in enumerate(in_images):
+            reproject(in_images[i], out_images[i], bitpix=bitpix,
+                north_aligned=north_aligned, system=system,
+                equinox=equinox, factor=factor,
+                exact_size=exact_size, cleanup=cleanup)
+        return
 
     # Make work directory
     work_dir = _make_work_dir()
 
-    # Create raw directory
-    os.mkdir(work_dir + 'raw')
-    os.mkdir(work_dir + 'final')
+    # Set paths
 
-    # Link to image
-    os.symlink(in_image, work_dir + 'raw/image.fits')
+    raw_dir = work_dir + 'raw/'
+    final_dir = work_dir + 'final/'
+
+    if header:
+        header_hdr = os.path.abspath(header)
+    else:
+        header_hdr = work_dir + 'header.hdr'
+
+    images_raw_tbl = work_dir + 'images_raw.tbl'
+    images_tmp_tbl = work_dir + 'images_tmp.tbl'
+
+    # Create raw directory
+    os.mkdir(raw_dir)
+    os.mkdir(final_dir)
+
+    # Link to images
+    for i, in_image in enumerate(in_images):
+        os.mkdir(raw_dir + '%i' % i)
+        os.symlink(in_image, raw_dir + '%i/image.fits' % i)
 
     # Make image table
-    m.mImgtbl(work_dir + 'raw', work_dir + 'images_raw.tbl', corners=True)
+    m.mImgtbl(raw_dir, images_raw_tbl, corners=True, recursive=True)
 
-    # Make new north-aligned header
-    m.mMakeHdr(work_dir + 'images_raw.tbl', work_dir + 'header.hdr', north_aligned=north_aligned,
-        system=system, equinox=equinox)
+    # Make new header
+    if not header:
+        m.mMakeHdr(images_raw_tbl, header_hdr, north_aligned=north_aligned,
+            system=system, equinox=equinox)
 
-    try:
-        m.mProjectPP(work_dir + 'raw/image.fits', work_dir + 'final/image.fits', work_dir + 'header.hdr')
-    except MontageError:
-        m.mProject(work_dir + 'raw/image.fits', work_dir + 'final/image.fits', work_dir + 'header.hdr')
+    for i, in_image in enumerate(in_images):
 
-    m.mConvert(work_dir + 'final/image.fits', out_image, bitpix=bitpix)
+        os.mkdir(final_dir + '%i' % i)
 
-    if cleanup:
-        # Deleting work directory
-        print "Deleting work directory %s" % work_dir
-        os.system("rm -r " + work_dir)
-    else:
-        # Leave work directory as it is
-        print "Leaving work directory %s" % work_dir
+        mProject_auto(in_images[i], final_dir + '%i/image_tmp.fits' % i,
+            header_hdr)
+
+        if exact_size:
+            m.mImgtbl(final_dir + '%i' % i, images_tmp_tbl, corners=True)
+            m.mAdd(images_tmp_tbl, header_hdr,
+                final_dir + '%i/image.fits' % i,
+                img_dir = final_dir + '%i' % i, exact=True)
+        else:
+            os.symlink(final_dir + '%i/image_tmp.fits' % i,
+                final_dir + '%i/image.fits' % i)
+
+        m.mConvert(final_dir + '%i/image.fits' % i, out_images[i],
+            bitpix=bitpix)
+
+    _finalize(cleanup, work_dir)
 
     return
 
@@ -135,8 +231,8 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
     background_match=False, imglist=None, combine="mean", exact_size=False,
     cleanup=True, bitpix=-32):
 
-    assert combine=='mean' or combine=='median' or combine=='count', \
-            "combine should be one of mean/median/count"
+    if not combine in ['mean', 'median', 'count']:
+        raise Exception("combine should be one of mean/median/count")
 
     # Find path to input and output directory
     input_dir = os.path.abspath(input_dir) + "/"
@@ -186,8 +282,9 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
 
     # Projecting raw frames
     print "Projecting raw frames"
-    m.mProjExec(work_dir + 'images_raw.tbl', work_dir + 'header.hdr', work_dir + 'projected', work_dir + 'stats.tbl',
-                    raw_dir=work_dir + 'raw', mpi=mpi, n_proc=n_proc)
+    m.mProjExec(work_dir + 'images_raw.tbl', work_dir + 'header.hdr',
+                work_dir + 'projected', work_dir + 'stats.tbl',
+                raw_dir=work_dir + 'raw', mpi=mpi, n_proc=n_proc)
 
     # List projected frames
     m.mImgtbl(work_dir + 'projected', work_dir + 'images_projected.tbl')
@@ -198,24 +295,29 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
 
         print "Modeling background"
         m.mOverlaps(work_dir + 'images_projected.tbl', work_dir + 'diffs.tbl')
-        m.mDiffExec(work_dir + 'diffs.tbl', work_dir + 'header.hdr', work_dir + 'diffs', proj_dir=work_dir + 'projected',
+        m.mDiffExec(work_dir + 'diffs.tbl', work_dir + 'header.hdr',
+                    work_dir + 'diffs', proj_dir=work_dir + 'projected',
                     mpi=mpi, n_proc=n_proc)
-        m.mFitExec(work_dir + 'diffs.tbl', work_dir + 'fits.tbl', work_dir + 'diffs')
-        m.mBgModel(work_dir + 'images_projected.tbl', work_dir + 'fits.tbl', work_dir + 'corrections.tbl',
-                    n_iter=32767, level_only=True)
+        m.mFitExec(work_dir + 'diffs.tbl', work_dir + 'fits.tbl',
+                   work_dir + 'diffs')
+        m.mBgModel(work_dir + 'images_projected.tbl', work_dir + 'fits.tbl',
+                   work_dir + 'corrections.tbl', n_iter=32767,
+                   level_only=True)
 
         # Matching background
         print "Matching background"
-        m.mBgExec(work_dir + 'images_projected.tbl', work_dir + 'corrections.tbl', work_dir + 'corrected',
-                    proj_dir=work_dir + 'projected')
+        m.mBgExec(work_dir + 'images_projected.tbl',
+                  work_dir + 'corrections.tbl', work_dir + 'corrected',
+                  proj_dir=work_dir + 'projected')
         sh.copy(work_dir + 'corrections.tbl', output_dir)
 
         # Mosaicking frames
         print "Mosaicking BCD frames"
 
         m.mImgtbl(work_dir + 'corrected', work_dir + 'images_corrected.tbl')
-        m.mAdd(work_dir + 'images_corrected.tbl', work_dir + 'header.hdr', output_dir + 'mosaic64.fits',
-                    img_dir=work_dir + 'corrected', type=combine, exact=exact_size)
+        m.mAdd(work_dir + 'images_corrected.tbl', work_dir + 'header.hdr',
+               output_dir + 'mosaic64.fits', img_dir=work_dir + 'corrected',
+               type=combine, exact=exact_size)
         sh.copy(work_dir + 'images_projected.tbl', output_dir)
         sh.copy(work_dir + 'images_corrected.tbl', output_dir)
 
@@ -224,23 +326,19 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
         # Mosaicking frames
         print "Mosaicking BCD frames"
 
-        m.mAdd(work_dir + 'images_projected.tbl', work_dir + 'header.hdr', output_dir + 'mosaic64.fits',
-                    img_dir=work_dir + 'projected', type=combine, exact=exact_size)
+        m.mAdd(work_dir + 'images_projected.tbl', work_dir + 'header.hdr',
+                output_dir + 'mosaic64.fits', img_dir=work_dir + 'projected',
+                type=combine, exact=exact_size)
         sh.copy(work_dir + 'images_projected.tbl', output_dir)
 
-    m.mConvert(output_dir + 'mosaic64.fits', output_dir + 'mosaic.fits', bitpix=bitpix)
-    m.mConvert(output_dir + 'mosaic64_area.fits', output_dir + 'mosaic_area.fits',
-                bitpix=bitpix)
+    m.mConvert(output_dir + 'mosaic64.fits', output_dir + 'mosaic.fits',
+               bitpix=bitpix)
+    m.mConvert(output_dir + 'mosaic64_area.fits',
+               output_dir + 'mosaic_area.fits', bitpix=bitpix)
 
     os.remove(output_dir + "mosaic64.fits")
     os.remove(output_dir + "mosaic64_area.fits")
 
-    if cleanup:
-        # Deleting work directory
-        print "Deleting work directory %s" % work_dir
-        os.system("rm -r " + work_dir)
-    else:
-        # Leave work directory as it is
-        print "Leaving work directory %s" % work_dir
+    _finalize(cleanup, work_dir)
 
     return
