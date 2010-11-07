@@ -3,30 +3,17 @@ import shutil as sh
 import random
 import string
 import warnings
+import tempfile
 
 import commands as m
 from status import MontageError
-
-
-def _make_work_dir():
-
-    # Create overall work dir
-    if not os.path.exists('/tmp/pymontage/'):
-        os.mkdir('/tmp/pymontage/')
-
-    # Create sub-directory
-    random_id = "".join([random.choice(string.letters) for i in xrange(16)])
-    work_dir = "/tmp/pymontage/" + random_id
-    os.mkdir(work_dir)
-
-    return work_dir + "/"
 
 
 def _finalize(cleanup, work_dir):
     if cleanup:
         # Deleting work directory
         print "Deleting work directory %s" % work_dir
-        sh.rmtree(workdir)
+        sh.rmtree(work_dir)
     else:
         # Leave work directory as it is
         print "Leaving work directory %s" % work_dir
@@ -51,7 +38,7 @@ try:
         '''
 
         # Make work directory
-        work_dir = _make_work_dir()
+        work_dir = tempfile.mkdtemp()
 
         in_image = work_dir + '/in.fits'
         out_image = work_dir + '/out.fits'
@@ -171,7 +158,7 @@ def reproject(in_images, out_images, header=None, bitpix=None,
         return
 
     # Make work directory
-    work_dir = _make_work_dir()
+    work_dir = tempfile.mkdtemp()
 
     # Set paths
 
@@ -241,8 +228,11 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
     # Make work directory
     if work_dir:
         work_dir = os.path.abspath(work_dir)
+        if os.path.exists(work_dir):
+            raise Exception("Work directory already exists")
+        os.mkdir(work_dir)
     else:
-        work_dir = _make_work_dir()
+        work_dir = tempfile.mkdtemp()
 
     images_raw_tbl = work_dir + 'images_raw.tbl'
     images_projected_tbl = work_dir + 'images_projected.tbl'
