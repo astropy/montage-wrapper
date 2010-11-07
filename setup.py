@@ -3,7 +3,7 @@
 from distutils.core import setup
 
 setup(name='python-montage',
-      version='0.9.0',
+      version='0.9.1',
       description='python-montage - a python Montage wrapper',
       author='Thomas Robitaille',
       author_email='robitaille@users.sourceforge.net',
