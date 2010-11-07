@@ -26,7 +26,7 @@ def _finalize(cleanup, work_dir):
     if cleanup:
         # Deleting work directory
         print "Deleting work directory %s" % work_dir
-        os.system("rm -r " + work_dir)
+        sh.rmtree(workdir)
     else:
         # Leave work directory as it is
         print "Leaving work directory %s" % work_dir
