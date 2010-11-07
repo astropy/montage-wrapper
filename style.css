@@ -1,0 +1,50 @@
+#main {
+	font-size: 12px;
+	width: 600px;
+	margin-right: auto;
+	margin-left: auto;
+	background-color: #323232;
+	padding: 15px;
+	text-align: justify;
+	color: #d5d5d5;
+}
+
+body {
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	background-color: #212121;
+}
+
+.title {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.subtitle {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.subtitleold {
+	font-size: 14px;
+	font-weight: bold;
+	border-bottom: 1px solid #515151;
+	width:  500px;
+}
+
+a {
+	color: #b1b2ff;
+}
+a:link, a:visited, a:active {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+
+.copyright {
+	font-size: 11px;
+	color: #515151;
+	text-align: justify;
+}
