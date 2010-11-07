@@ -16,7 +16,7 @@ def _make_work_dir():
 
     # Create sub-directory
     random_id = "".join([random.choice(string.letters) for i in xrange(16)])
-    work_dir = "/tmp/pymontage/"+random_id
+    work_dir = "/tmp/pymontage/" + random_id
     os.mkdir(work_dir)
 
     return work_dir + "/"
@@ -208,19 +208,19 @@ def reproject(in_images, out_images, header=None, bitpix=None,
         os.mkdir(final_dir + '%i' % i)
 
         mProject_auto(in_images[i], final_dir + '%i/image_tmp.fits' % i,
-            header_hdr)
+                      header_hdr)
 
         if exact_size:
             m.mImgtbl(final_dir + '%i' % i, images_tmp_tbl, corners=True)
             m.mAdd(images_tmp_tbl, header_hdr,
-                final_dir + '%i/image.fits' % i,
-                img_dir = final_dir + '%i' % i, exact=True)
+                   final_dir + '%i/image.fits' % i,
+                   img_dir=final_dir + '%i' % i, exact=True)
         else:
             os.symlink(final_dir + '%i/image_tmp.fits' % i,
-                final_dir + '%i/image.fits' % i)
+                       final_dir + '%i/image.fits' % i)
 
         m.mConvert(final_dir + '%i/image.fits' % i, out_images[i],
-            bitpix=bitpix)
+                   bitpix=bitpix)
 
     _finalize(cleanup, work_dir)
 
@@ -228,8 +228,8 @@ def reproject(in_images, out_images, header=None, bitpix=None,
 
 
 def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
-    background_match=False, imglist=None, combine="mean", exact_size=False,
-    cleanup=True, bitpix=-32, work_dir=None):
+           background_match=False, imglist=None, combine="mean",
+           exact_size=False, cleanup=True, bitpix=-32, work_dir=None):
 
     if not combine in ['mean', 'median', 'count']:
         raise Exception("combine should be one of mean/median/count")
