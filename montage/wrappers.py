@@ -229,7 +229,7 @@ def reproject(in_images, out_images, header=None, bitpix=None,
 
 def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
     background_match=False, imglist=None, combine="mean", exact_size=False,
-    cleanup=True, bitpix=-32):
+    cleanup=True, bitpix=-32, work_dir=None):
 
     if not combine in ['mean', 'median', 'count']:
         raise Exception("combine should be one of mean/median/count")
@@ -239,7 +239,10 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
     output_dir = os.path.abspath(output_dir) + "/"
 
     # Make work directory
-    work_dir = _make_work_dir()
+    if work_dir:
+        work_dir = os.path.abspath(work_dir)
+    else:
+        work_dir = _make_work_dir()
 
     images_raw_tbl = work_dir + 'images_raw.tbl'
     images_projected_tbl = work_dir + 'images_projected.tbl'
