@@ -275,7 +275,7 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
 
     # List frames to mosaic
     print "Listing raw frames"
-    m.mImgtbl(raw_dir, images_raw_tbl, img_list=imglist)
+    m.mImgtbl(raw_dir, images_raw_tbl, img_list=imglist, corners=True)
 
     # Compute header if needed
     if not header:
