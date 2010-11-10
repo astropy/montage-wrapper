@@ -214,7 +214,8 @@ def reproject(in_images, out_images, header=None, bitpix=None,
 
 def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
            background_match=False, imglist=None, combine="mean",
-           exact_size=False, cleanup=True, bitpix=-32, work_dir=None):
+           exact_size=False, cleanup=True, bitpix=-32, level_only=True,
+           work_dir=None):
 
     if not combine in ['mean', 'median', 'count']:
         raise Exception("combine should be one of mean/median/count")
@@ -300,7 +301,7 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
                     mpi=mpi, n_proc=n_proc)
         m.mFitExec(diffs_tbl, fits_tbl, diffs_dir)
         m.mBgModel(images_projected_tbl, fits_tbl, corrections_tbl,
-                   n_iter=32767, level_only=True)
+                   n_iter=32767, level_only=level_only)
 
         # Matching background
         print "Matching background"
