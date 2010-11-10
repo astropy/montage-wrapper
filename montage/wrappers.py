@@ -225,7 +225,7 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
 
     # Make work directory
     if work_dir:
-        work_dir = os.path.abspath(work_dir)
+        work_dir = os.path.abspath(work_dir) + '/'
         if os.path.exists(work_dir):
             raise Exception("Work directory already exists")
         os.mkdir(work_dir)
