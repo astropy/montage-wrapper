@@ -231,7 +231,7 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
             raise Exception("Work directory already exists")
         os.mkdir(work_dir)
     else:
-        work_dir = tempfile.mkdtemp()
+        work_dir = tempfile.mkdtemp() + '/'
 
     images_raw_tbl = work_dir + 'images_raw.tbl'
     images_projected_tbl = work_dir + 'images_projected.tbl'
