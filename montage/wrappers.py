@@ -36,7 +36,7 @@ try:
         '''
 
         # Make work directory
-        work_dir = tempfile.mkdtemp()
+        work_dir = tempfile.mkdtemp() + '/'
 
         in_image = work_dir + '/in.fits'
         out_image = work_dir + '/out.fits'
@@ -156,7 +156,7 @@ def reproject(in_images, out_images, header=None, bitpix=None,
         return
 
     # Make work directory
-    work_dir = tempfile.mkdtemp()
+    work_dir = tempfile.mkdtemp() + '/'
 
     # Set paths
 
