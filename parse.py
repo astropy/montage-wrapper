@@ -5,6 +5,7 @@ import string
 
 from BeautifulSoup import BeautifulSoup
 
+
 def optional(command, option):
     if command == 'mExec' and option == 'workspace-dir':
         return True
@@ -12,7 +13,7 @@ def optional(command, option):
         return True
     if command == 'mFixNan' and option in ['minblank', 'maxblank']:
         return True
-    if command == 'mRotate' and option in ['ra', 'dec','xsize','ysize']:
+    if command == 'mRotate' and option in ['ra', 'dec', 'xsize', 'ysize']:
         return True
     if command == 'mTileHdr' and option in ['xpad', 'ypad']:
         return True
@@ -21,7 +22,8 @@ def optional(command, option):
     if command == 'mSubimage_pix' and option in ['ypixsize']:
         return True
     return False
-    
+
+
 def suboptional(command, option):
     if command == 'mRotate' and option in ['ysize']:
         return True
@@ -30,10 +32,10 @@ def suboptional(command, option):
     if command == 'mMakeHdr' and option in ['equinox']:
         return True
     return False
-    
+
 
 # MPI stuff
-mpi_enabled = ['mProjExec','mFitExec','mDiffExec','mBgExec','mAdd','mAddExec']
+mpi_enabled = ['mProjExec', 'mFitExec', 'mDiffExec', 'mBgExec', 'mAdd', 'mAddExec']
 mpi_description = "If set to True, will use the MPI-enabled versions of the Montage executable."
 nproc_description = "If mpi is set to True, n_proc is the number of processes to run simultaneously (default is 8)"
 
@@ -104,6 +106,7 @@ req_dict['statusfile'] = 'status_file'
 req_dict['tiledir'] = 'tile_dir'
 req_dict['weightfile'] = 'weight_file'
 
+
 def required_argument_name(command, argument):
     '''
     Given a Montage command and an argument, returns a sanitized name for the argument
@@ -114,7 +117,7 @@ def required_argument_name(command, argument):
     argument = argument.replace('.hdr', '_header')
     argument = argument.replace('-', '_')
 
-    if argument in ['level','debug']:
+    if argument in ['level', 'debug']:
         return 'debug_level'
     elif argument == 'in1_image':
         return 'in_image_1'
@@ -161,7 +164,7 @@ for api_file in glob.glob(os.path.join('api/', '*.html')):
     html = html.replace(u'-niter', u'niter')
     html = html.replace(u'NaN-value', u'nan_value')
     html = html.replace(u'<a href="mArchiveGet.html>', u'<a href="mArchiveGet.html">')
-    html = html.replace(u'<dt>\n  <dt>','<dt>')
+    html = html.replace(u'<dt>\n  <dt>', '<dt>')
     # Parse HTML
     soup = BeautifulSoup(html)
 
@@ -195,17 +198,17 @@ for api_file in glob.glob(os.path.join('api/', '*.html')):
     required_docstring = ''
 
     if command in mpi_enabled:
-        code = '    if mpi:\n        command = "mpirun -n %%i %sMPI" %% n_proc\n    else:\n        command = "%s"\n' % (command,command)
+        code = '    if mpi:\n        command = "mpirun -n %%i %sMPI" %% n_proc\n    else:\n        command = "%s"\n' % (command, command)
     else:
         code = '    command = "%s"\n' % command
 
     for i, arg in enumerate(options):
 
-        options[i] = options[i].replace('(optional)','')
+        options[i] = options[i].replace('(optional)', '')
         option = options[i].split()
         option_description = options_descr[i].strip()
-        option_description = option_description.replace('\n',' ')
-        option_description = string.join(option_description.split()," ")
+        option_description = option_description.replace('\n', ' ')
+        option_description = string.join(option_description.split(), " ")
         option_description = option_description.replace('.fits', '_image')
         option_description = option_description.replace('.tbl', '_table')
         option_description = option_description.replace('.hdr', '_header')
@@ -213,45 +216,45 @@ for api_file in glob.glob(os.path.join('api/', '*.html')):
         option_description = option_description.replace('flag', 'option')
         option_description = option_description.replace('. (', ' (')
 
-        if command in ['mAdd','mAddExec'] and option[0] == '-p':
-            option_description = option_description.replace('-p option','imgdir option')
-            option_description = option_description.replace('mAdd modules','mAdd command')
-        elif command=='mBgModel':
-            option_description = option_description.replace('without switch, ','')
-        elif command=='mImgtbl':
-            option_description = option_description.replace('"-r" (recursive) option','recursive option')
-            option_description = option_description.replace('"-c" (corners)','corners')
-            option_description = option_description.replace('Example: example.fieldlist.','')
-            option_description = option_description.replace('Example: example.imglist.','')
-            option_description = option_description.replace('proessing','processing')
-        elif command=='mConvert' and option[0] == '-b':
-            option_description = option_description.replace('integer) ','integer), ')
-            option_description = option_description.replace('point) ','point), ')
-        elif command=='mDiff':
-            option_description = option_description.replace('-n option','the no_area option')
-            option_description = option_description.replace(' in1_area.fits','')
-            option_description = option_description.replace(' in2_area.fits','')
-        elif command=='mShrink':
-            option_description = option_description.replace('-f (fixed-size)','fixed_size')
-        elif command=='mSubset':
-            option_description = option_description.replace('-c option','corners option')
-        elif command=='mHdr':
+        if command in ['mAdd', 'mAddExec'] and option[0] == '-p':
+            option_description = option_description.replace('-p option', 'imgdir option')
+            option_description = option_description.replace('mAdd modules', 'mAdd command')
+        elif command == 'mBgModel':
+            option_description = option_description.replace('without switch, ', '')
+        elif command == 'mImgtbl':
+            option_description = option_description.replace('"-r" (recursive) option', 'recursive option')
+            option_description = option_description.replace('"-c" (corners)', 'corners')
+            option_description = option_description.replace('Example: example.fieldlist.', '')
+            option_description = option_description.replace('Example: example.imglist.', '')
+            option_description = option_description.replace('proessing', 'processing')
+        elif command == 'mConvert' and option[0] == '-b':
+            option_description = option_description.replace('integer) ', 'integer), ')
+            option_description = option_description.replace('point) ', 'point), ')
+        elif command == 'mDiff':
+            option_description = option_description.replace('-n option', 'the no_area option')
+            option_description = option_description.replace(' in1_area.fits', '')
+            option_description = option_description.replace(' in2_area.fits', '')
+        elif command == 'mShrink':
+            option_description = option_description.replace('-f (fixed-size)', 'fixed_size')
+        elif command == 'mSubset':
+            option_description = option_description.replace('-c option', 'corners option')
+        elif command == 'mHdr':
             if option[0] == 'object|location':
                 option_description = "Object string or coordinate location"
             if option[0] == '-s':
                 option_description = 'Specify a coordinate system. Can be one of: "equatorial" or "eq" (default), "ecliptic" or "ec" "galactic", "ga", "supergalactic" or "sgal"'
-        elif command=='mArchiveGet':
+        elif command == 'mArchiveGet':
             if option[0] == 'remote_ref':
                 option_description = "URL of remote FITS file to retrieve"
-        elif command=='mFixNan':
-            option_description = option_description.replace('"-v" option','nan_value option')
-        elif command=='mHdrtbl':
-            option_description = option_description.replace('"-r" (recursive) option','recursive option')
-            option_description = option_description.replace('"-c" option','corners option')
-            option_description = option_description.replace('Example: example.imglist.','')
-            option_description = option_description.replace('"-c" (corners)','corners')
-        elif command=='mExec':
-            option_description = option_description.replace('("-r" option)','(raw_dir option)')
+        elif command == 'mFixNan':
+            option_description = option_description.replace('"-v" option', 'nan_value option')
+        elif command == 'mHdrtbl':
+            option_description = option_description.replace('"-r" (recursive) option', 'recursive option')
+            option_description = option_description.replace('"-c" option', 'corners option')
+            option_description = option_description.replace('Example: example.imglist.', '')
+            option_description = option_description.replace('"-c" (corners)', 'corners')
+        elif command == 'mExec':
+            option_description = option_description.replace('("-r" option)', '(raw_dir option)')
 
         for argument in req_dict:
             option_description = option_description.replace(argument, req_dict[argument])
@@ -278,7 +281,7 @@ for api_file in glob.glob(os.path.join('api/', '*.html')):
 
             code += '    if %s:\n        command += " %s %%s" %% str(%s)\n' % (variable, option[0], variable)
 
-        elif option[0][0] <> '-' and optional(command, option[0]):
+        elif option[0][0] != '-' and optional(command, option[0]):
 
             if suboptional(command, option[0]):
                 pad = "    "
@@ -293,7 +296,7 @@ for api_file in glob.glob(os.path.join('api/', '*.html')):
                 variable = required_argument_name(command, opt)
                 if_statement += ["%s" % variable]
 
-            code += string.join(if_statement," and ") + ":\n"
+            code += string.join(if_statement, " and ") + ":\n"
 
             for opt in option:
 
@@ -307,7 +310,7 @@ for api_file in glob.glob(os.path.join('api/', '*.html')):
 
             optional_docstring += '\n        *%s* [ value ]\n' % variables[:-2] + docwrapper.fill(option_description) + '\n'
 
-        elif option[0][0] <> '-':
+        elif option[0][0] != '-':
 
             variables = ""
 
