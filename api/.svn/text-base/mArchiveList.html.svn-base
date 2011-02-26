@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	  <head>
+	    <title>Montage User Documentation</title>
+	    
+<link rel="stylesheet" type="text/css" media="screen,projection" href="/style.css" />
+
+</head>
+
+<body>
+<div id="container">
+
+<div id="montage-banner">
+<img src="/images/MontageBanner.jpg" width="796" height="128" border="0" alt="" usemap="#MontageBanner_Map" />
+<map name="MontageBanner_Map">
+<area shape="rect" alt="" coords="713,77,767,127" href="http://ct.gsfc.nasa.gov" />
+<area shape="rect" alt="" coords="687,21,789,69" href="http://irsa.ipac.caltech.edu" />
+<area shape="rect" alt="" coords="0,0,123,128" href="http://montage.ipac.caltech.edu" />
+</map>
+<!-- End ImageReady Slices -->
+</div>
+<div id="nav">
+    <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="http://hachi.ipac.caltech.edu:8080/montage">On-Request Mosaics</a></li>
+    <li><a href="/docs/download.html">Download</a></li>
+    <li><a href="/docs/">Documentation</a></li>
+    <li><a href="/applications.html">Applications</a></li>
+    <li><a href="/publications.html">Publications</a></li>
+    <li><a href="http://irsa.ipac.caltech.edu/cgi-bin/Helpdesk/nph-genTicketForm?projname=Montage&projmail=montage@ipac.caltech.edu">Helpdesk</a></li>
+  </ul>
+</div>
+
+<div id="content">
+
+<div id="wrapper">
+<h1>mArchiveList</h1>
+
+<div id="usage">
+<a name="usage"></a>
+<dl class="description">
+  <dt>Description:</dt>
+  <dd>Given a location on the sky, archive name, and size in degrees, contact the IRSA server to retrieve a list of archive images.  The list contains enough information to support <a href="mArchiveGet.html><span class="file">mArchiveGet</span></a> downloads.</dd>
+</dl>
+
+<dl class="syntax">
+  <dt>Syntax:</dt>
+  <dd>mArchiveList <b>survey band object|location width height outfile</b></dd>
+</dl>
+
+<p class="dochead">Arguments:</p>
+<dl class="args">
+  <dt>survey</dt>
+  <dd>Can be one of:
+    <ul>
+      <li>2MASS</li>
+      <li>DSS</li>
+      <li>SDSS</li>
+      <li>DPOSS</li>
+    </ul></dd>
+  <dt>band</dt>
+  <dd>Case insensitive - can be one of:
+    <ul>
+      <li>(2MASS) j, h, k </li>
+      <li>(SDSS) u, g, r, i, z</li>
+      <li>(DPOSS) f, j, n</li>
+      <li>(DSS) DSS1, DSS1R, DSS1B, DSS2, DSS2B, DSS2R, DSS2IR</li>
+    </ul>
+
+  <dt>object|location</dt>
+  <dd>Object name or coordinate string to be resolved by NED (if string includes spaces, must be surrounded by double quotes)</dd>
+  <dt>width</dt>
+  <dd>Width of area of interest, in degrees</dd>
+  <dt>height</dt>
+  <dd>Height of area of interest, in degrees</dd>
+  <dt>outfile</dt>
+  <dd>Path to output table</dd>
+</dl>
+
+<dl class="description">
+  <dt>Results:</dt>
+  <dd><span class="file">[struct stat="OK", count=<i>num-images</i>]</dd>
+  <dd><span class="file">outfile</span> is an ASCII table of image metadata for the region and survey of interest.  The last column in the table is a URL that <a href="mArchiveGet.html"><span class="file">mArchiveGet</span></a> can use to retrieve the image.</dd>
+</dl>
+
+<a name="ex"></a><p class="dochead">Examples:</p>
+
+<p>To retrieve metadata and file handles for 2MASS J-band images, covering a half-degree by half-degree area around m31:</p>
+
+<dl class="example">
+  <dt>mArchiveList 2mass j m31 0.5 0.5 2mass_m31_j.tbl</dt>
+  <dd>[struct stat="OK", count=18]</dd>
+</dl>
+
+<p>Output file: <a href="examples/mArchiveList/2mass_m31_j.tbl"><span class="file">2mass_m31_j.tbl</span></a>.</p>
+
+<p>To retrieve GPFS file handles for SDSS u-band images:</p>
+
+<dl class="example">
+  <dt>mArchiveList -s gpfs sdss u m101 0.2 0.2 sdss_m101_u.tbl</dt>
+  <dd>[struct stat="OK", count=16]</dd>
+</dl>
+
+<p>Output file: <a href="examples/mArchiveList/sdss_m101_u.tbl"><span class="file">sdss_m101_u.tbl</span></a>.</p>
+
+<p class="dochead">Return Codes:</p>
+<ul class="returncodes">
+  <li>[struct stat="OK", count=<i>num-files</i>]</li>
+  <li>[struct stat="ERROR", msg="Usage: mArchiveList [-s source] survey band object|location width height outfile (object/location must be a single argument string)"]</li>
+  <li>[struct stat="ERROR", msg="Can't open output file <i>outfile</i>"]</li>
+  <li>[struct stat="ERROR", msg="<i>Error message from IRSA's ImgList service</i>"]</li>
+  <li>[struct stat="ERROR", msg="Couldn't find host <i>hostname</i>"] <span class="explanation">(Unable to resolve hostname for IRSA's ImgList service)</soan></li>
+  <li>[struct stat="ERROR", msg="Couldn't create socket()"] <span class="explanation">(Error opening TCP connection)</span></li>
+  <li>[struct stat="ERROR", msg="<i>hostname</i>: connect failed"] <span class="explanation">(Server that hosts IRSA's ImgList service is unreachable)</span></li>
+</ul>
+
+</div>
+</div>
+
+</div> <!-- end #content -->
+
+<div id="footer">
+
+<p class="foot-just"><i>If your research uses Montage, please include the following acknowledgement: </i>"This research made use of Montage, funded by the National Aeronautics and Space Administration's Earth Science Technology Office, Computation Technologies Project, under Cooperative Agreement Number NCC5-626 between NASA and the California Institute of Technology.  Montage is maintained by the NASA/IPAC Infrared Science Archive."</p>
+<p class="foot-unjust">The Montage distribution includes an adaptation of the MOPEX algorithm developed at the Spitzer Science Center.</p>
+<!-- ImageReady Slices (logobar.psd) -->
+<div align="center">
+<img src="/images/logobar.jpg" border="0" alt="" usemap="#logobar_Map" />
+<map name="logobar_Map">
+<area shape="poly" alt="" coords="185,46, 203,21, 255,3, 345,2, 409,35, 410,56, 403,71, 354,98, 301,103, 221,91, 187,64" href="/" />
+<area shape="rect" alt="" coords="379,96,475,161" href="http://www.cct.lsu.edu" />
+<area shape="rect" alt="" coords="95,14,179,91" href="http://www.caltech.edu" />
+<area shape="rect" alt="" coords="424,13,499,82" href="http://www.nasa.gov" />
+<area shape="rect" alt="" coords="1,33,90,66" href="http://jpl.nasa.gov" />
+<area shape="rect" alt="" coords="150,106,234,148" href="http://www.ipac.caltech.edu" />
+<area shape="rect" alt="" coords="265,106,337,181" href="http://www.cacr.caltech.edu" />
+<area shape="rect" alt="" coords="512,31,611,79" href="http://us-vo.org" />
+</map>
+</div>
+<!-- End ImageReady Slices -->
+</div>
+</div> <!-- end #container-->
+</body>
+</html>
+
