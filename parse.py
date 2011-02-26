@@ -147,7 +147,7 @@ descwrapper = textwrap.TextWrapper(
 
 # Open output file
 fo = open('commands.py', 'wb')
-fo.write('import subprocess\nimport status\n\n')
+fo.write('import subprocess\nimport status\nimport shlex\n\n')
 
 # Cycle through API files
 for api_file in glob.glob(os.path.join('api/', '*.html')):
@@ -346,7 +346,7 @@ for api_file in glob.glob(os.path.join('api/', '*.html')):
 
     docstring += "    '''\n"
 
-    code += '    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,\n        stderr=subprocess.PIPE)\n    stderr = p.stderr.read()\n    if stderr:\n        raise Exception(stderr)\n    return status.parse_struct("%s", p.stdout.read().strip())\n\n' % command
+    code += '    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,\n        stderr=subprocess.PIPE)\n    stderr = p.stderr.read()\n    if stderr:\n        raise Exception(stderr)\n    return status.parse_struct("%s", p.stdout.read().strip())\n\n' % command
 
     fo.write(arguments)
     fo.write(docstring)
