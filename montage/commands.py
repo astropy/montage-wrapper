@@ -1,5 +1,6 @@
 import subprocess
 import status
+import shlex
 
 
 def mAdd(images_table, template_header, out_image, img_dir=None,
@@ -82,7 +83,7 @@ def mAdd(images_table, template_header, out_image, img_dir=None,
     command += " " + str(images_table)
     command += " " + str(template_header)
     command += " " + str(out_image)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -167,7 +168,7 @@ def mAddExec(images_table, template_header, tile_dir, out_image, img_dir=None,
     command += " " + str(template_header)
     command += " " + str(tile_dir)
     command += " " + str(out_image)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -196,7 +197,7 @@ def mArchiveExec(region_table, debug_level=None):
     if debug_level:
         command += " -d %s" % str(debug_level)
     command += " " + str(region_table)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -234,7 +235,7 @@ def mArchiveGet(remote_ref, local_file, debug=False, raw=False):
         command += " -r"
     command += ' "' + str(remote_ref) + '"'
     command += " " + str(local_file)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -278,7 +279,7 @@ def mArchiveList(survey, band, object_or_location, width, height, out_file):
     command += " " + str(width)
     command += " " + str(height)
     command += " " + str(out_file)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -331,7 +332,7 @@ def mBackground(in_image, out_image, A, B, C, debug_level=None, no_area=False,
     command += " " + str(A)
     command += " " + str(B)
     command += " " + str(C)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -387,7 +388,7 @@ def mBackground_tab(in_image, out_image, images_table, corrections_table,
     command += " " + str(out_image)
     command += " " + str(images_table)
     command += " " + str(corrections_table)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -423,7 +424,7 @@ def mBestImage(images_table, ra, dec, debug_level=None):
     command += " " + str(images_table)
     command += " " + str(ra)
     command += " " + str(dec)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -487,7 +488,7 @@ def mBgExec(images_table, corrections_table, corr_dir, proj_dir=None,
     command += " " + str(images_table)
     command += " " + str(corrections_table)
     command += " " + str(corr_dir)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -548,7 +549,7 @@ def mBgModel(images_table, fits_table, corrections_table, n_iter=None,
     command += " " + str(images_table)
     command += " " + str(fits_table)
     command += " " + str(corrections_table)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -604,7 +605,7 @@ def mCatMap(in_table, out_image, template_header, column=None, ref_mag=None,
     command += " " + str(in_table)
     command += " " + str(out_image)
     command += " " + str(template_header)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -676,7 +677,7 @@ def mConvert(in_image, out_image, debug_level=None, status_file=None,
         command += " -blank %s" % str(blank_value)
     command += " " + str(in_image)
     command += " " + str(out_image)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -734,7 +735,7 @@ def mDiff(in_image_1, in_image_2, out_image, template_header,
     command += " " + str(in_image_2)
     command += " " + str(out_image)
     command += " " + str(template_header)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -797,7 +798,7 @@ def mDiffExec(diffs_table, template_header, diff_dir, proj_dir=None,
     command += " " + str(diffs_table)
     command += " " + str(template_header)
     command += " " + str(diff_dir)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -841,7 +842,7 @@ def mDiffFitExec(diffs_table, fits_table, diff_dir, debug=False,
     command += " " + str(diffs_table)
     command += " " + str(fits_table)
     command += " " + str(diff_dir)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -939,7 +940,7 @@ def mExec(survey, band, raw_dir=None, n_tile_x=None, n_tile_y=None,
     command += " " + str(band)
     if workspace_dir:
         command += " %s" % str(workspace_dir)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -994,7 +995,7 @@ def mFitExec(diffs_table, fits_table, diff_dir, debug=False, status_file=None,
     command += " " + str(diffs_table)
     command += " " + str(fits_table)
     command += " " + str(diff_dir)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -1032,7 +1033,7 @@ def mFitplane(in_image, border=None, debug_level=None, status_file=None):
     if status_file:
         command += " -s %s" % str(status_file)
     command += " " + str(in_image)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -1077,7 +1078,7 @@ def mFixNan(in_image, out_image, debug_level=None, nan_value=None,
     if min_blank and max_blank:
         command += " %s" % str(min_blank)
         command += " %s" % str(max_blank)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -1125,7 +1126,7 @@ def mFlattenExec(images_table, flat_dir, img_dir=None, debug=False,
         command += " -s %s" % str(status_file)
     command += " " + str(images_table)
     command += " " + str(flat_dir)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -1167,7 +1168,7 @@ def mGetHdr(in_image, img_header, debug=False, hdu=None, status_file=None):
         command += " -s %s" % str(status_file)
     command += " " + str(in_image)
     command += " " + str(img_header)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -1225,7 +1226,7 @@ def mHdr(object_or_location, width, out_file, system=None, equinox=None,
     command += ' "' + str(object_or_location) + '"'
     command += " " + str(width)
     command += " " + str(out_file)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -1256,7 +1257,7 @@ def mHdrCheck(in_image, status_file=None):
     if status_file:
         command += " -s %s" % str(status_file)
     command += " " + str(in_image)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -1328,7 +1329,7 @@ def mHdrtbl(directory, images_table, recursive=False, corners=False,
         command += " -t %s" % str(img_list)
     command += " " + str(directory)
     command += " " + str(images_table)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -1421,7 +1422,7 @@ def mImgtbl(directory, images_table, recursive=False, corners=False,
         command += " -t %s" % str(img_list)
     command += " " + str(directory)
     command += " " + str(images_table)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -1486,7 +1487,7 @@ def mMakeHdr(images_table, template_header, debug_level=None,
         command += " %s" % str(system)
         if equinox:
             command += " %s" % str(equinox)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -1538,7 +1539,7 @@ def mOverlaps(images_table, diffs_table, exact=False, debug_level=None,
         command += " -s %s" % str(status_file)
     command += " " + str(images_table)
     command += " " + str(diffs_table)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -1574,7 +1575,7 @@ def mPix2Coord(template_header, ixpix, jypix, debug=False):
     command += " " + str(template_header)
     command += " " + str(ixpix)
     command += " " + str(jypix)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -1665,7 +1666,7 @@ def mProject(in_image, out_image, template_header, factor=None,
     command += " " + str(in_image)
     command += " " + str(out_image)
     command += " " + str(template_header)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -1766,7 +1767,7 @@ def mProjectPP(in_image, out_image, template_header, factor=None,
     command += " " + str(in_image)
     command += " " + str(out_image)
     command += " " + str(template_header)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -1864,7 +1865,7 @@ def mProjExec(images_table, template_header, proj_dir, stats_table,
     command += " " + str(template_header)
     command += " " + str(proj_dir)
     command += " " + str(stats_table)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -1910,7 +1911,7 @@ def mPutHdr(in_image, out_image, template_header, debug=False,
     command += " " + str(in_image)
     command += " " + str(out_image)
     command += " " + str(template_header)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -1968,7 +1969,7 @@ def mRotate(in_image, out_image, debug_level=None, status_file=None,
         command += " %s" % str(xsize)
         if ysize:
             command += " %s" % str(ysize)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -2017,7 +2018,7 @@ def mShrink(in_image, out_image, factor, fixed_size=False, debug_level=None,
     command += " " + str(in_image)
     command += " " + str(out_image)
     command += " " + str(factor)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -2082,7 +2083,7 @@ def mSubimage(in_image, out_image, ra, dec, xsize, debug=False,
     command += " " + str(xsize)
     if ysize:
         command += " %s" % str(ysize)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -2140,7 +2141,7 @@ def mSubimage_pix(in_image, out_image, xstartpix, ystartpix, xpixsize,
     command += " " + str(xpixsize)
     if ypixsize:
         command += " %s" % str(ypixsize)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -2190,7 +2191,7 @@ def mSubset(images_table, template_header, subset_table, debug_level=None,
     command += " " + str(images_table)
     command += " " + str(template_header)
     command += " " + str(subset_table)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -2247,7 +2248,7 @@ def mTANHdr(orig_header, new_header, debug=False, order=None, max_iter=None,
         command += " -s %s" % str(status_file)
     command += " " + str(orig_header)
     command += " " + str(new_header)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -2281,7 +2282,7 @@ def mTblSort(in_table, column_name, out_table, debug=False):
     command += " " + str(in_table)
     command += " " + str(column_name)
     command += " " + str(out_table)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
@@ -2349,7 +2350,7 @@ def mTileHdr(orig_header, new_header, n_x, n_y, ix, iy, debug=False,
         command += " %s" % str(xpad)
         if ypad:
             command += " %s" % str(ypad)
-    p = subprocess.Popen(command.split(), stdout=subprocess.PIPE,
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
     if stderr:
