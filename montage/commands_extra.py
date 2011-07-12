@@ -118,7 +118,6 @@ def mCoverageCheck(in_table, out_table, mode, polygon=None, ra=None,
         command += " " + header
     else:
         raise Exception("Unknown mode: %s" % mode)
-    print command
     p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     stderr = p.stderr.read()
