@@ -1,4 +1,5 @@
 import os
+import glob
 import shutil as sh
 import warnings
 import tempfile
@@ -367,6 +368,10 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
 
     if not combine in ['mean', 'median', 'count']:
         raise Exception("combine should be one of mean/median/count")
+
+    # Check that there are files in the input directory
+    if len(glob.glob('%s/*' % input_dir)) == 0:
+        raise Exception("No files in input directory")
 
     # Find path to input and output directory
     input_dir = os.path.abspath(input_dir) + "/"
