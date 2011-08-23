@@ -147,7 +147,7 @@ try:
                 system=system, equinox=equinox)
 
         cubefile = pyfits.open(in_image)
-        if len(cubefile[0].data.shape) != 3:
+        if len(cubefile[0].data.shape) != 3 or cubefile[0].header.get('NAXIS') != 3:
             raise Exception("Cube file must have 3 dimensions")
 
         # a temporary HDU that will be used to hold different data each time
@@ -164,10 +164,12 @@ try:
         w.writelines([line for line in headerlines])
         w.close()
 
+        # when creating the new header, allow the 3rd axis to be
+        # set by the input data cube
         newheader = pyfits.Header()
         newheader.fromTxtFile(header_temp)
         blank_data = numpy.zeros(
-                [newheader.get('NAXIS3'),
+                [cubefile[0].header.get('NAXIS3'),
                 newheader.get('NAXIS2'),
                 newheader.get('NAXIS1')]
                 )
@@ -444,7 +446,7 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
     # Projecting raw frames
     print "Projecting raw frames"
     m.mProjExec(images_raw_tbl, header_hdr, projected_dir, stats_tbl,
-                raw_dir=raw_dir, mpi=mpi, n_proc=n_proc)
+                raw_dir=raw_dir, mpi=mpi, n_proc=n_proc, exact=exact_size)
 
     # List projected frames
     m.mImgtbl(projected_dir, images_projected_tbl)
