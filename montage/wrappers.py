@@ -214,7 +214,7 @@ def mProject_auto(*args, **kwargs):
 
 def reproject(in_images, out_images, header=None, bitpix=None,
     north_aligned=False, system=None, equinox=None, factor=None, common=False,
-    exact_size=False, cleanup=True, silent_cleanup=False):
+    exact_size=False, hdu=None, cleanup=True, silent_cleanup=False):
     '''
     General-purpose reprojection routine.
 
@@ -267,6 +267,9 @@ def reproject(in_images, out_images, header=None, bitpix=None,
         *exact_size* [ True | False ]
             Whether to reproject the image(s) to the exact header specified
             (i.e. whether cropping is unacceptable).
+
+        *hdu* [ value ]
+            The HDU to use in the file(s)
 
         *silent_cleanup* [ True | False ]  (default False)
             Hide messages related to tmp directory removal
@@ -344,7 +347,7 @@ def reproject(in_images, out_images, header=None, bitpix=None,
         os.mkdir(final_dir + '%i' % i)
 
         mProject_auto(in_images[i], final_dir + '%i/image_tmp.fits' % i,
-                      header_hdr)
+                      header_hdr, hdu=hdu)
 
         if exact_size:
             m.mImgtbl(final_dir + '%i' % i, images_tmp_tbl, corners=True)
