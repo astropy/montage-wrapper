@@ -2127,7 +2127,7 @@ def mSubimage_pix(in_image, out_image, xstartpix, ystartpix, xpixsize,
         *ypixsize* [ value ]
             Height of output image in pixels (default is equal to xpix_size
     '''
-    command = "mSubimage_pix"
+    command = "mSubimage -p"
     if debug:
         command += " -d"
     if hdu:
