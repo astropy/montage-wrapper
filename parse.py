@@ -202,6 +202,9 @@ for api_file in glob.glob(os.path.join('api/', '*.html')):
     else:
         code = '    command = "%s"\n' % command
 
+    # Special case
+    code = code.replace('mSubimage_pix', 'mSubimage -p')
+
     for i, arg in enumerate(options):
 
         options[i] = options[i].replace('(optional)', '')
