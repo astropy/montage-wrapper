@@ -14,11 +14,13 @@ from .status import MontageError
 def _finalize(cleanup, work_dir, silence=False):
     if cleanup:
         # Deleting work directory
-        if not silence: log.info("Deleting work directory %s" % work_dir)
+        if not silence:
+            log.info("Deleting work directory %s" % work_dir)
         sh.rmtree(work_dir)
     else:
         # Leave work directory as it is
-        if not silence: log.info("Leaving work directory %s" % work_dir)
+        if not silence:
+            log.info("Leaving work directory %s" % work_dir)
 
 
 def reproject_hdu(in_hdu, **kwargs):
@@ -52,9 +54,10 @@ def reproject_hdu(in_hdu, **kwargs):
 
 import numpy
 
+
 def reproject_cube(in_image, out_image, header=None, bitpix=None,
-    north_aligned=False, system=None, equinox=None, factor=None, common=False,
-    cleanup=True, clobber=False, silent_cleanup=True):
+                   north_aligned=False, system=None, equinox=None, factor=None, common=False,
+                   cleanup=True, clobber=False, silent_cleanup=True):
     '''
     Cube reprojection routine.
 
@@ -112,7 +115,7 @@ def reproject_cube(in_image, out_image, header=None, bitpix=None,
     out_image = os.path.abspath(out_image)
 
     if os.path.exists(out_image) and not clobber:
-        raise IOError( "File '%s' already exists and clobber=False." % out_image )
+        raise IOError("File '%s' already exists and clobber=False." % out_image)
 
     # Make work directory
     work_dir = tempfile.mkdtemp() + '/'
@@ -137,7 +140,7 @@ def reproject_cube(in_image, out_image, header=None, bitpix=None,
     # Make new header
     if not header:
         m.mMakeHdr(images_raw_tbl, header_hdr, north_aligned=north_aligned,
-            system=system, equinox=equinox)
+                   system=system, equinox=equinox)
 
     cubefile = fits.open(in_image)
     if len(cubefile[0].data.shape) != 3 or cubefile[0].header.get('NAXIS') != 3:
@@ -145,15 +148,15 @@ def reproject_cube(in_image, out_image, header=None, bitpix=None,
 
     # a temporary HDU that will be used to hold different data each time
     # and reproject each plane separately
-    planefile = fits.PrimaryHDU(data=cubefile[0].data[0,:,:],
-            header=cubefile[0].header)
+    planefile = fits.PrimaryHDU(data=cubefile[0].data[0, :, :],
+                                header=cubefile[0].header)
 
     # generate a blank HDU to store the eventual projected cube
 
     # first must remove END card from .hdr file
-    header_temp = header_hdr.replace(".hdr","_tmp.hdr")
-    headerlines = open(header_hdr,'r').readlines()[:-1]
-    w = open(header_temp,'w')
+    header_temp = header_hdr.replace(".hdr", "_tmp.hdr")
+    headerlines = open(header_hdr, 'r').readlines()[:-1]
+    w = open(header_temp, 'w')
     w.writelines([line for line in headerlines])
     w.close()
 
@@ -163,10 +166,10 @@ def reproject_cube(in_image, out_image, header=None, bitpix=None,
     newheader.fromTxtFile(header_temp)
     blank_data = numpy.zeros(
             [cubefile[0].header.get('NAXIS3'),
-            newheader.get('NAXIS2'),
-            newheader.get('NAXIS1')]
-            )
-    newcube = fits.PrimaryHDU(data=blank_data,header=newheader)
+             newheader.get('NAXIS2'),
+             newheader.get('NAXIS1')]
+    )
+    newcube = fits.PrimaryHDU(data=blank_data, header=newheader)
 
     for ii, plane in enumerate(cubefile[0].data):
 
@@ -178,12 +181,12 @@ def reproject_cube(in_image, out_image, header=None, bitpix=None,
         # reproject the individual plane - exact size MUST be specified so that the
         # data can be put into the specified cube
         reprojected = reproject_hdu(planefile, header=header_hdr,
-                exact_size=True, factor=factor, bitpix=bitpix,
-                silent_cleanup=silent_cleanup)
+                                    exact_size=True, factor=factor, bitpix=bitpix,
+                                    silent_cleanup=silent_cleanup)
 
-        newcube.data[ii,:,:] = reprojected.data
+        newcube.data[ii, :, :] = reprojected.data
 
-    newcube.writeto(out_image,clobber=clobber)
+    newcube.writeto(out_image, clobber=clobber)
 
     _finalize(cleanup, work_dir)
 
@@ -203,8 +206,8 @@ def mProject_auto(*args, **kwargs):
 
 
 def reproject(in_images, out_images, header=None, bitpix=None,
-    north_aligned=False, system=None, equinox=None, factor=None, common=False,
-    exact_size=False, hdu=None, cleanup=True, silent_cleanup=False):
+              north_aligned=False, system=None, equinox=None, factor=None, common=False,
+              exact_size=False, hdu=None, cleanup=True, silent_cleanup=False):
     '''
     General-purpose reprojection routine.
 
@@ -290,10 +293,10 @@ def reproject(in_images, out_images, header=None, bitpix=None,
     if len(in_images) > 1 and not header and not common:
         for i, in_image in enumerate(in_images):
             reproject(in_images[i], out_images[i], bitpix=bitpix,
-                north_aligned=north_aligned, system=system,
-                equinox=equinox, factor=factor,
-                exact_size=exact_size, cleanup=cleanup,
-                silent_cleanup=silent_cleanup)
+                      north_aligned=north_aligned, system=system,
+                      equinox=equinox, factor=factor,
+                      exact_size=exact_size, cleanup=cleanup,
+                      silent_cleanup=silent_cleanup)
         return
 
     # Make work directory
@@ -327,7 +330,7 @@ def reproject(in_images, out_images, header=None, bitpix=None,
     # Make new header
     if not header:
         m.mMakeHdr(images_raw_tbl, header_hdr, north_aligned=north_aligned,
-            system=system, equinox=equinox)
+                   system=system, equinox=equinox)
 
     for i, in_image in enumerate(in_images):
 
@@ -413,7 +416,6 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
         is a temporary directory in a system-defined location, but it can be
         useful to specify this manually for debugging purposes.
     """
-
 
     if not combine in ['mean', 'median', 'count']:
         raise Exception("combine should be one of mean/median/count")
