@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+      <title>Montage User Documentation</title>
+  
+<link rel="stylesheet" type="text/css" media="screen,projection" href="/style.css" />
+
+</head>
+
+<body>
+<div id="container">
+
+<div id="montage-banner">
+<img src="/images/MontageBanner.jpg" width="796" height="128" border="0" alt="" usemap="#MontageBanner_Map" />
+<map name="MontageBanner_Map">
+<area shape="rect" alt="" coords="713,77,767,127" href="http://ct.gsfc.nasa.gov" />
+<area shape="rect" alt="" coords="687,21,789,69" href="http://irsa.ipac.caltech.edu" />
+<area shape="rect" alt="" coords="0,0,123,128" href="http://montage.ipac.caltech.edu" />
+</map>
+<!-- End ImageReady Slices -->
+</div>
+<div id="nav">
+    <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="http://hachi.ipac.caltech.edu:8080/montage">On-Request Mosaics</a></li>
+    <li><a href="/docs/download.html">Download</a></li>
+    <li><a href="/docs/">Documentation</a></li>
+    <li><a href="/applications.html">Applications</a></li>
+    <li><a href="/publications.html">Publications</a></li>
+    <li><a href="http://irsa.ipac.caltech.edu/cgi-bin/Helpdesk/nph-genTicketForm?projname=Montage&projmail=montage@ipac.caltech.edu">Helpdesk</a></li>
+  </ul>
+</div>
+
+<div id="content">
+
+<div id="wrapper">
+<h1>mTileHdr</h1>
+
+<div id="usage">
+
+<dl class="description">
+  <dt>Description:</dt>
+  <dd>Takes a header template file and creates another which represents one of a regular set of tiles covering the original.  The user specifies the tile gridding and which tile is desired.</dd>
+  <dd>Only the NAXIS and CRVAL keyword lines are changed (pixel size and reference point location); all other keyword values will be inherited from the input header.</dd>
+</dl>
+
+<dl class="syntax">
+  <dt>Syntax:</dt>
+  <dd>mTileHdr [-d] [-s <i>statusfile</i>] <b>orig.hdr new.hdr nx ny ix iy</b> [xpad [ypad]]</dd>
+</dl>
+
+<p class="dochead">Switches:</p>
+<dl class="args">
+  <dt>-d</dt>
+  <dd>Turns on debugging.</dd>
+  <dt>-s <i>statusfile</i></dt>
+  <dd>Output and errors are sent to <i>statusfile</i> instead of to stdout</dd>
+</dl>
+
+<p class="dochead">Arguments:</p>
+<dl class="args">
+  <dt>orig.hdr</dt>
+  <dd>ASCII <a href="headers.html">header template</a> from which to derive tiled headers</dd>
+  <dt>new.hdr</dt>
+  <dd>Path to output header</dd>
+  <dt>nx</dt>
+  <dd>Number of tiles in the x-direction</dd>
+  <dt>ny</dt>
+  <dd>Number of tiles in the y-direction</dd>
+  <dt>ix</dt>
+  <dd>Integer identifying the x location of the output tile on the grid (counting from 0)</dd>
+  <dt>iy</dt>
+  <dd>Integer identifying the y location of the output tile on the grid (counting from 0)</dd>
+  <dt>xpad</dt>
+  <dd>Number of pixels to overlap tiles in the x direction (default is 0)</dd>
+  <dt>ypad</dt>
+  <dd>Number of pixels to overlap tiles in the y direction (default is 0). Only used if xpad is present.</dd>
+</dl>
+
+<dl class="description">
+  <dt>Results:</dt>
+  <dd><span class="file">[struct stat="OK", naxis1=<i>xsize</i>, naxis1=<i>ysize</i>, crpix1=<i>xref</i>, crpix2=<i>yref</i>]</dd>
+  <dd>Where <i>xsize</i> and <i>ysize</i> are the x and y dimensions of the image described by the output header, and <i>crpix1</i> and <i>crpix2</i> are the new offset from the original reference pixel on the sky. </dd>
+</dl>
+
+<p class="dochead">Examples</p>
+<p><a href="examples/mTileHdr/template.hdr">template.hdr</a> is 850x850 pixels, and we want to generate the center tile out of 9 (3 by 3):</p>
+<dl class="example">
+  <dt>$ mTileHdr template.hdr tile_1_1.hdr 3 3 1 1</dt>
+  <dd>[struct stat="OK", naxis1=283, naxis2=283, crpix1=-283, crpix2=-283]</dd>
+</dl>
+<p><a href="examples/mTileHdr/tile_1_1.hdr">tile_1_1.hdr</a> has the same reference location and pixel scale as the input header, but a new pixel offset (CRPIX) and size (NAXIS).</p>
+
+<p class="dochead">Return Codes:</p>
+<ul class="returncodes">
+  <li>[struct stat="OK", naxis1=<i>xsize</i>, naxis2=<i>ysize</i>, crpix1=<i>xref</i>, crpix2=<i>yref</i>]</li>
+  <li>[struct stat="ERROR", msg="Usage: mTileHdr [-d] [-s statusfile] orig.hdr new.hdr nx ny ix iy [xpad [ypad]]"</li>
+  <li>[struct stat="ERROR", msg="Cannot open status file: <i>statusfile</i>"]</li>   
+  <li>[struct stat="ERROR", msg="(nx,ny) have to be positive integers and (ix,iy) have to be in the range (0..nx-1, 0..ny-1)"]</li>   
+  <li>[stat="ERROR", msg="Cannot open output template <i>new.hdr</i>"]</li>   
+  <li>[stat="ERROR", msg="Bad template:<i>orig.hdr</i>"]</li>   
+  <li>[stat="ERROR", msg="Bad template:<i>new.hdr</i>"]</li>   
+  <li>[struct stat="ERROR", msg="Output wcsinit() failed."]</li>   
+</ul>
+</div>
+</div>
+
+</div> <!-- end #content -->
+
+<div id="footer">
+
+<p class="foot-just"><i>If your research uses Montage, please include the following acknowledgement: </i>"This research made use of Montage, funded by the National Aeronautics and Space Administration's Earth Science Technology Office, Computation Technologies Project, under Cooperative Agreement Number NCC5-626 between NASA and the California Institute of Technology.  Montage is maintained by the NASA/IPAC Infrared Science Archive."</p>
+<p class="foot-unjust">The Montage distribution includes an adaptation of the MOPEX algorithm developed at the Spitzer Science Center.</p>
+<!-- ImageReady Slices (logobar.psd) -->
+<div align="center">
+<img src="/images/logobar.jpg" border="0" alt="" usemap="#logobar_Map" />
+<map name="logobar_Map">
+<area shape="poly" alt="" coords="185,46, 203,21, 255,3, 345,2, 409,35, 410,56, 403,71, 354,98, 301,103, 221,91, 187,64" href="/" />
+<area shape="rect" alt="" coords="379,96,475,161" href="http://www.cct.lsu.edu" />
+<area shape="rect" alt="" coords="95,14,179,91" href="http://www.caltech.edu" />
+<area shape="rect" alt="" coords="424,13,499,82" href="http://www.nasa.gov" />
+<area shape="rect" alt="" coords="1,33,90,66" href="http://jpl.nasa.gov" />
+<area shape="rect" alt="" coords="150,106,234,148" href="http://www.ipac.caltech.edu" />
+<area shape="rect" alt="" coords="265,106,337,181" href="http://www.cacr.caltech.edu" />
+<area shape="rect" alt="" coords="512,31,611,79" href="http://us-vo.org" />
+</map>
+</div>
+<!-- End ImageReady Slices -->
+</div>
+</div> <!-- end #container-->
+</body>
+</html>
+

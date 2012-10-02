@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	  <head>
+	    <title>Montage User Documentation</title>
+	    
+<link rel="stylesheet" type="text/css" media="screen,projection" href="/style.css" />
+
+</head>
+
+<body>
+<div id="container">
+
+<div id="montage-banner">
+<img src="/images/MontageBanner.jpg" width="796" height="128" border="0" alt="" usemap="#MontageBanner_Map" />
+<map name="MontageBanner_Map">
+<area shape="rect" alt="" coords="713,77,767,127" href="http://ct.gsfc.nasa.gov" />
+<area shape="rect" alt="" coords="687,21,789,69" href="http://irsa.ipac.caltech.edu" />
+<area shape="rect" alt="" coords="0,0,123,128" href="http://montage.ipac.caltech.edu" />
+</map>
+<!-- End ImageReady Slices -->
+</div>
+<div id="nav">
+    <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="http://hachi.ipac.caltech.edu:8080/montage">On-Request Mosaics</a></li>
+    <li><a href="/docs/download.html">Download</a></li>
+    <li><a href="/docs/">Documentation</a></li>
+    <li><a href="/applications.html">Applications</a></li>
+    <li><a href="/publications.html">Publications</a></li>
+    <li><a href="http://irsa.ipac.caltech.edu/cgi-bin/Helpdesk/nph-genTicketForm?projname=Montage&projmail=montage@ipac.caltech.edu">Helpdesk</a></li>
+  </ul>
+</div>
+
+<div id="content">
+
+<div id="wrapper">
+<h1>mShrink</h1>
+
+<div id="usage">
+
+<dl class="description">
+  <dt>Description:</dt>
+  <dd>A utility for reducing the size of a FITS file, by averaging blocks of pixels.</dd>
+</dl>
+
+<dl class="syntax">
+  <dt>Syntax:</dt>
+  <dd>mShrink [-f] [-d <i>level</i>] [-s <i>statusfile</i>] <b>in.fits out.fits factor</b></dd>
+</dl>
+
+<p class="dochead">Switches:</p>
+<dl class="args">
+  <dt>-f</dt>
+  <dd>Fixed-size flag - specify output size of image, instead of the size of blocks of pixels to be averaged</dd>
+  <dt>-d <i>level</i></dt>
+  <dd>Turns on debugging to the specified level (1-4).</dd>
+  <dt>-s <i>statusfile</i></dt>
+  <dd>Output and errors are sent to <i>statusfile</i> instead of to stdout</dd>
+</dl>
+
+<p class="dochead">Arguments:</p>
+<dl class="args">
+  <dt>in.fits</dt>
+  <dd>Input FITS file</dd>
+  <dt>out.fits</dt>
+  <dd>Path to output FITS file.</dd>
+  <dt>factor</dt>
+  <dd>Size of blocks, in pixels, to average. File size will be reduced by 1/<i>factor</i> squared. If the -f (fixed-size) flag is used, <i>factor</i> is the desired width of the output image.</dd>
+</dl>
+
+<dl class="description">
+  <dt>Results:</dt>
+  <dd>[Normal mode]: FITS output image, reduced in size by a factor of (1/<i>factor</i>)^2  .</dd>
+  <dd>[Fixed-size mode]: FITS output image of width <i>factor</i></dd>
+</dl>
+
+<p class="dochead">Examples</p>
+
+<dl class="example">
+  <dt>$ mShrink final/out.fits final/out-lowres_5.fits 5</dt>
+  <dd>[struct stat="OK"]</dd>
+</dl>
+
+<p class="dochead">Return Codes:</p>
+<ul class="returncodes">
+  <li>[struct stat="OK"]</li>   
+  <li>[struct stat="ERROR", msg="Usage: mShrink [-f(ixed-size)] [-d level] [-s statusfile] in.fits out.fits factor"]</li>   
+  <li>[struct stat="ERROR", msg="Cannot open status file: <i>statusfile</i>"]</li>   
+  <li>[struct stat="ERROR", msg="Image size <i>factor</i> cannot be interpreted as an real number"]</li>   
+  <li>[struct stat="ERROR", msg="Shrink factor <i>factor</i> cannot be interpreted as an real number"]</li>   
+  <li>[struct stat="ERROR", msg=\"Shrink factor <i>factor</i> must be positive"]</li>   
+  <li>[struct stat="ERROR", msg="Image file <i>in.fits</i> missing of inavlid FITS."]</li>   
+  <li>[struct stat="ERROR", status=<i>n</i>, msg="<i>FITS library error</i>"]</li>   
+</ul>
+</div>
+</div>
+
+</div> <!-- end #content -->
+
+<div id="footer">
+
+<p class="foot-just"><i>If your research uses Montage, please include the following acknowledgement: </i>"This research made use of Montage, funded by the National Aeronautics and Space Administration's Earth Science Technology Office, Computation Technologies Project, under Cooperative Agreement Number NCC5-626 between NASA and the California Institute of Technology.  Montage is maintained by the NASA/IPAC Infrared Science Archive."</p>
+<p class="foot-unjust">The Montage distribution includes an adaptation of the MOPEX algorithm developed at the Spitzer Science Center.</p>
+<!-- ImageReady Slices (logobar.psd) -->
+<div align="center">
+<img src="/images/logobar.jpg" border="0" alt="" usemap="#logobar_Map" />
+<map name="logobar_Map">
+<area shape="poly" alt="" coords="185,46, 203,21, 255,3, 345,2, 409,35, 410,56, 403,71, 354,98, 301,103, 221,91, 187,64" href="/" />
+<area shape="rect" alt="" coords="379,96,475,161" href="http://www.cct.lsu.edu" />
+<area shape="rect" alt="" coords="95,14,179,91" href="http://www.caltech.edu" />
+<area shape="rect" alt="" coords="424,13,499,82" href="http://www.nasa.gov" />
+<area shape="rect" alt="" coords="1,33,90,66" href="http://jpl.nasa.gov" />
+<area shape="rect" alt="" coords="150,106,234,148" href="http://www.ipac.caltech.edu" />
+<area shape="rect" alt="" coords="265,106,337,181" href="http://www.cacr.caltech.edu" />
+<area shape="rect" alt="" coords="512,31,611,79" href="http://us-vo.org" />
+</map>
+</div>
+<!-- End ImageReady Slices -->
+</div>
+</div> <!-- end #container-->
+</body>
+</html>
+
