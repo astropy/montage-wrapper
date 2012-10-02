@@ -26,13 +26,13 @@ from astropy import setup_helpers
 from astropy.version_helper import get_git_devstr, generate_version_py
 
 # Set affiliated package-specific settings
-PACKAGENAME = 'packagename'
-DESCRIPTION = 'Astropy affiliated package'
+PACKAGENAME = 'montage'
+DESCRIPTION = 'IPAC Montage wrapper'
 LONG_DESCRIPTION = ''
-AUTHOR = ''
-AUTHOR_EMAIL = ''
+AUTHOR = 'Thomas Robitaille'
+AUTHOR_EMAIL = 'thomas.robitaille@gmail.com'
 LICENSE = 'BSD'
-URL = 'http://astropy.org'
+URL = ''
 
 #version should be PEP386 compatible (http://www.python.org/dev/peps/pep-0386)
 version = '0.0.dev'
