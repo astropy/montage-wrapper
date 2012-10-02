@@ -1,5 +1,9 @@
 CHANGES
 
+  Version 0.9.4
+
+    - python-montage is now an Astropy affiliated package
+
   Version 0.9.3
 
     - Fixed bug with user-specified work directory

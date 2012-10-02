@@ -10,6 +10,19 @@ Montage Astronomical Image Mosaic Engine, including both functions to access
 individual Montage commands, and high-level functions to facilitate
 mosaicking and re-projecting.
 
+Installation
+============
+
+Python-montage is a wrapper, not a replacement, for the IPAC Montage
+mosaicking software. Therefore, Montage will need to be installed (see
+`http://montage.ipac.caltech.edu `_ for more details). Once the IPAC Montage
+package is installed, you can install python-montage with::
+
+    python setup.py install
+
+The only dependencies are `Numpy <http://www.numpy.org>`_ and `Astropy
+<http://www.astropy.org>`_.
+
 Using `montage`
 ===============
 
