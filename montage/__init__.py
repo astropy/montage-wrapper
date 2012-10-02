@@ -83,3 +83,16 @@ def test(package=None, test_path=None, args=None, plugins=None,
         plugins=plugins, verbose=verbose, pastebin=pastebin,
         remote_data=remote_data, pep8=pep8, pdb=pdb,
         coverage=coverage, **kwargs)
+
+from commands import *
+from wrappers import *
+
+# Check whether Montage is installed
+installed = False
+for dir in os.environ['PATH'].split(':'):
+    if os.path.exists(dir + '/mProject'):
+        installed = True
+        break
+
+if not installed:
+    raise Exception("Montage commands are not in your PATH")

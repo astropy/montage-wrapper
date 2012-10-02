@@ -27,7 +27,7 @@ from astropy.version_helper import get_git_devstr, generate_version_py
 
 # Set affiliated package-specific settings
 PACKAGENAME = 'montage'
-DESCRIPTION = 'IPAC Montage wrapper'
+DESCRIPTION = 'python-montage - a python Montage wrapper'
 LONG_DESCRIPTION = ''
 AUTHOR = 'Thomas Robitaille'
 AUTHOR_EMAIL = 'thomas.robitaille@gmail.com'
@@ -35,7 +35,7 @@ LICENSE = 'BSD'
 URL = ''
 
 #version should be PEP386 compatible (http://www.python.org/dev/peps/pep-0386)
-version = '0.0.dev'
+version = '0.9.4.dev'
 
 # Indicates if this version is a release version
 release = 'dev' not in version
@@ -126,3 +126,4 @@ setup(name=PACKAGENAME,
       zip_safe=False,
       use_2to3=True
       )
+

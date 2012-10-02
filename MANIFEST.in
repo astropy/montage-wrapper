@@ -12,3 +12,5 @@ exclude *.pyc *.o
 prune docs/_build
 prune build
 
+include INSTALL CHANGES README LICENSE
+
