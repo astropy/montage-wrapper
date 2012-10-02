@@ -5,6 +5,7 @@ import warnings
 import tempfile
 
 from astropy.io import fits
+from astropy import log
 
 from . import commands as m
 from .status import MontageError
@@ -13,11 +14,11 @@ from .status import MontageError
 def _finalize(cleanup, work_dir, silence=False):
     if cleanup:
         # Deleting work directory
-        if not silence: print "Deleting work directory %s" % work_dir
+        if not silence: log.info("Deleting work directory %s" % work_dir)
         sh.rmtree(work_dir)
     else:
         # Leave work directory as it is
-        if not silence: print "Leaving work directory %s" % work_dir
+        if not silence: log.info("Leaving work directory %s" % work_dir)
 
 
 def reproject_hdu(in_hdu, **kwargs):
@@ -26,12 +27,12 @@ def reproject_hdu(in_hdu, **kwargs):
 
     Parameters
     ----------
-    in_hdu : `~astropy.io.fits.PrimaryHDU` or `~astropy.io.fits.ImageHDU`
+    in_hdu : :class:`~astropy.io.fits.PrimaryHDU` or :class:`~astropy.io.fits.ImageHDU`
         Input FITS HDU to be reprojected.
 
     Notes
     -----
-    Additional keyword arguments are passed to `~montage.wrappers.reproject`
+    Additional keyword arguments are passed to :func:`~montage.wrappers.reproject`
     '''
 
     # Make work directory
@@ -477,20 +478,20 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
         os.mkdir(corrected_dir)
 
     # List frames to mosaic
-    print "Listing raw frames"
+    log.info("Listing raw frames")
     m.mImgtbl(raw_dir, images_raw_all_tbl, img_list=imglist, corners=True)
 
     # Compute header if needed
     if not header:
-        print "Computing optimal header"
+        log.info("Computing optimal header")
         m.mMakeHdr(images_raw_all_tbl, header_hdr)
         images_raw_tbl = images_raw_all_tbl
     else:
-        print "Checking for coverage"
+        log.info("Checking for coverage")
         m.mCoverageCheck(images_raw_all_tbl, images_raw_tbl, mode='header', header=header_hdr)
 
     # Projecting raw frames
-    print "Projecting raw frames"
+    log.info("Projecting raw frames")
     m.mProjExec(images_raw_tbl, header_hdr, projected_dir, stats_tbl,
                 raw_dir=raw_dir, mpi=mpi, n_proc=n_proc, exact=exact_size)
 
@@ -501,7 +502,7 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
 
         # Modeling background
 
-        print "Modeling background"
+        log.info("Modeling background")
         m.mOverlaps(images_projected_tbl, diffs_tbl)
         m.mDiffExec(diffs_tbl, header_hdr, diffs_dir, proj_dir=projected_dir,
                     mpi=mpi, n_proc=n_proc)
@@ -510,13 +511,13 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
                    n_iter=32767, level_only=level_only)
 
         # Matching background
-        print "Matching background"
+        log.info("Matching background")
         m.mBgExec(images_projected_tbl, corrections_tbl, corrected_dir,
                   proj_dir=projected_dir)
         sh.copy(corrections_tbl, output_dir)
 
         # Mosaicking frames
-        print "Mosaicking frames"
+        log.info("Mosaicking frames")
 
         m.mImgtbl(corrected_dir, images_corrected_tbl)
         m.mAdd(images_corrected_tbl, header_hdr, output_dir + 'mosaic64.fits',
@@ -527,7 +528,7 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
     else:
 
         # Mosaicking frames
-        print "Mosaicking frames"
+        log.info("Mosaicking frames")
 
         m.mAdd(images_projected_tbl, header_hdr, output_dir + 'mosaic64.fits',
                img_dir=projected_dir, type=combine, exact=exact_size)
@@ -542,5 +543,3 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
     os.remove(output_dir + "mosaic64_area.fits")
 
     _finalize(cleanup, work_dir)
-
-    return

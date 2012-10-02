@@ -1,5 +1,6 @@
 import hashlib
 
+from astropy import log
 
 def simplify(value):
     try:
@@ -64,7 +65,7 @@ class Struct(object):
         if self.stat == "ERROR":
             raise MontageError("%s: %s" % (command, self.msg))
         elif self.stat == "WARNING":
-            print "WARNING: %s" % self.msg
+            log.warn(self.msg)
 
     def __repr__(self):
         string = ""
