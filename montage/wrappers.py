@@ -4,6 +4,8 @@ import shutil as sh
 import warnings
 import tempfile
 
+import numpy
+
 from astropy.io import fits
 from astropy import log
 
@@ -38,10 +40,10 @@ def reproject_hdu(in_hdu, **kwargs):
     '''
 
     # Make work directory
-    work_dir = tempfile.mkdtemp() + '/'
+    work_dir = tempfile.mkdtemp()
 
-    in_image = work_dir + '/in.fits'
-    out_image = work_dir + '/out.fits'
+    in_image = os.path.join(work_dir, 'in.fits')
+    out_image = os.path.join(work_dir, 'out.fits')
 
     fits.writeto(in_image, in_hdu.data, in_hdu.header)
 
@@ -50,9 +52,6 @@ def reproject_hdu(in_hdu, **kwargs):
     out_hdu = fits.open(out_image)[0]
 
     return out_hdu
-
-
-import numpy
 
 
 def reproject_cube(in_image, out_image, header=None, bitpix=None,
@@ -118,20 +117,20 @@ def reproject_cube(in_image, out_image, header=None, bitpix=None,
         raise IOError("File '%s' already exists and clobber=False." % out_image)
 
     # Make work directory
-    work_dir = tempfile.mkdtemp() + '/'
+    work_dir = tempfile.mkdtemp()
 
     # Set paths
 
-    raw_dir = work_dir + 'raw/'
-    final_dir = work_dir + 'final/'
+    raw_dir = os.path.join(work_dir, 'raw')
+    final_dir = os.path.join(work_dir, 'final')
 
     if header:
         header_hdr = os.path.abspath(header)
     else:
-        header_hdr = work_dir + 'header.hdr'
+        header_hdr = os.path.join(work_dir, 'header.hdr')
 
-    images_raw_tbl = work_dir + 'images_raw.tbl'
-    images_tmp_tbl = work_dir + 'images_tmp.tbl'
+    images_raw_tbl = os.path.join(work_dir, 'images_raw.tbl')
+    images_tmp_tbl = os.path.join(work_dir, 'images_tmp.tbl')
 
     # Create raw directory
     os.mkdir(raw_dir)
@@ -173,7 +172,7 @@ def reproject_cube(in_image, out_image, header=None, bitpix=None,
 
     for ii, plane in enumerate(cubefile[0].data):
 
-        os.mkdir(final_dir + '%i' % ii)
+        os.mkdir(os.path.join(final_dir, '%i' % ii))
 
         # reset the data plane within the temporary HDU
         planefile.data = plane
@@ -300,20 +299,20 @@ def reproject(in_images, out_images, header=None, bitpix=None,
         return
 
     # Make work directory
-    work_dir = tempfile.mkdtemp() + '/'
+    work_dir = tempfile.mkdtemp()
 
     # Set paths
 
-    raw_dir = work_dir + 'raw/'
-    final_dir = work_dir + 'final/'
+    raw_dir = os.path.join(work_dir, 'raw')
+    final_dir = os.path.join(work_dir, 'final')
 
     if header:
         header_hdr = os.path.abspath(header)
     else:
-        header_hdr = work_dir + 'header.hdr'
+        header_hdr = os.path.join(work_dir, 'header.hdr')
 
-    images_raw_tbl = work_dir + 'images_raw.tbl'
-    images_tmp_tbl = work_dir + 'images_tmp.tbl'
+    images_raw_tbl = os.path.join(work_dir, 'images_raw.tbl')
+    images_tmp_tbl = os.path.join(work_dir, 'images_tmp.tbl')
 
     # Create raw directory
     os.mkdir(raw_dir)
@@ -321,8 +320,8 @@ def reproject(in_images, out_images, header=None, bitpix=None,
 
     # Link to images
     for i, in_image in enumerate(in_images):
-        os.mkdir(raw_dir + '%i' % i)
-        os.symlink(in_image, raw_dir + '%i/image.fits' % i)
+        os.mkdir(os.path.join(raw_dir, '%i' % i))
+        os.symlink(in_image, os.path.join(raw_dir, '%i' % i , 'image.fits'))
 
     # Make image table
     m.mImgtbl(raw_dir, images_raw_tbl, corners=True, recursive=True)
@@ -334,21 +333,21 @@ def reproject(in_images, out_images, header=None, bitpix=None,
 
     for i, in_image in enumerate(in_images):
 
-        os.mkdir(final_dir + '%i' % i)
+        os.mkdir(os.path.join(final_dir, '%i' % i))
 
-        mProject_auto(in_images[i], final_dir + '%i/image_tmp.fits' % i,
+        mProject_auto(in_images[i], os.path.join(final_dir, '%i' % i, 'image_tmp.fits'),
                       header_hdr, hdu=hdu)
 
         if exact_size:
-            m.mImgtbl(final_dir + '%i' % i, images_tmp_tbl, corners=True)
+            m.mImgtbl(os.path.join(final_dir, '%i' % i), images_tmp_tbl, corners=True)
             m.mAdd(images_tmp_tbl, header_hdr,
-                   final_dir + '%i/image.fits' % i,
-                   img_dir=final_dir + '%i' % i, exact=True)
+                   os.path.join(final_dir, '%i' % i, 'image.fits'),
+                   img_dir=os.path.join(final_dir, '%i' % i), exact=True)
         else:
-            os.symlink(final_dir + '%i/image_tmp.fits' % i,
-                       final_dir + '%i/image.fits' % i)
+            os.symlink(os.path.join(final_dir, '%i' % i, 'image_tmp.fits'),
+                       os.path.join(final_dir, '%i' % i, 'image.fits'))
 
-        m.mConvert(final_dir + '%i/image.fits' % i, out_images[i],
+        m.mConvert(os.path.join(final_dir, '%i' % i, 'image.fits'), out_images[i],
                    bitpix=bitpix)
 
     _finalize(cleanup, work_dir, silence=silent_cleanup)
@@ -421,37 +420,37 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
         raise Exception("combine should be one of mean/median/count")
 
     # Check that there are files in the input directory
-    if len(glob.glob('%s/*' % input_dir)) == 0:
+    if len(glob.glob(os.path.join(input_dir, '*'))) == 0:
         raise Exception("No files in input directory")
 
     # Find path to input and output directory
-    input_dir = os.path.abspath(input_dir) + "/"
-    output_dir = os.path.abspath(output_dir) + "/"
+    input_dir = os.path.abspath(input_dir)
+    output_dir = os.path.abspath(output_dir)
 
     # Make work directory
     if work_dir:
-        work_dir = os.path.abspath(work_dir) + '/'
+        work_dir = os.path.abspath(work_dir)
         if os.path.exists(work_dir):
             raise Exception("Work directory already exists")
         os.mkdir(work_dir)
     else:
-        work_dir = tempfile.mkdtemp() + '/'
+        work_dir = tempfile.mkdtemp()
 
-    images_raw_all_tbl = work_dir + 'images_raw_all.tbl'
-    images_raw_tbl = work_dir + 'images_raw.tbl'
-    images_projected_tbl = work_dir + 'images_projected.tbl'
-    images_corrected_tbl = work_dir + 'images_corrected.tbl'
-    corrections_tbl = work_dir + 'corrections.tbl'
-    diffs_tbl = work_dir + 'diffs.tbl'
-    stats_tbl = work_dir + 'stats.tbl'
-    fits_tbl = work_dir + 'fits.tbl'
+    images_raw_all_tbl = os.path.join(work_dir, 'images_raw_all.tbl')
+    images_raw_tbl = os.path.join(work_dir, 'images_raw.tbl')
+    images_projected_tbl = os.path.join(work_dir, 'images_projected.tbl')
+    images_corrected_tbl = os.path.join(work_dir, 'images_corrected.tbl')
+    corrections_tbl = os.path.join(work_dir, 'corrections.tbl')
+    diffs_tbl = os.path.join(work_dir, 'diffs.tbl')
+    stats_tbl = os.path.join(work_dir, 'stats.tbl')
+    fits_tbl = os.path.join(work_dir, 'fits.tbl')
 
-    raw_dir = work_dir + 'raw'
-    projected_dir = work_dir + 'projected'
-    corrected_dir = work_dir + 'corrected'
-    diffs_dir = work_dir + 'diffs'
+    raw_dir = os.path.join(work_dir, 'raw')
+    projected_dir = os.path.join(work_dir, 'projected')
+    corrected_dir = os.path.join(work_dir, 'corrected')
+    diffs_dir = os.path.join(work_dir, 'diffs')
 
-    header_hdr = work_dir + 'header.hdr'
+    header_hdr = os.path.join(work_dir, 'header.hdr')
 
     # Find path to header file if specified
     if header:
@@ -522,7 +521,8 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
         log.info("Mosaicking frames")
 
         m.mImgtbl(corrected_dir, images_corrected_tbl)
-        m.mAdd(images_corrected_tbl, header_hdr, output_dir + 'mosaic64.fits',
+        m.mAdd(images_corrected_tbl, header_hdr,
+               os.path.join(output_dir, 'mosaic64.fits'),
                img_dir=corrected_dir, type=combine, exact=exact_size)
         sh.copy(images_projected_tbl, output_dir)
         sh.copy(images_corrected_tbl, output_dir)
@@ -532,16 +532,19 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
         # Mosaicking frames
         log.info("Mosaicking frames")
 
-        m.mAdd(images_projected_tbl, header_hdr, output_dir + 'mosaic64.fits',
+        m.mAdd(images_projected_tbl, header_hdr,
+               os.path.join(output_dir, 'mosaic64.fits'),
                img_dir=projected_dir, type=combine, exact=exact_size)
         sh.copy(images_projected_tbl, output_dir)
 
-    m.mConvert(output_dir + 'mosaic64.fits', output_dir + 'mosaic.fits',
+    m.mConvert(os.path.join(output_dir, 'mosaic64.fits'),
+               os.path.join(output_dir, 'mosaic.fits'),
                bitpix=bitpix)
-    m.mConvert(output_dir + 'mosaic64_area.fits',
-               output_dir + 'mosaic_area.fits', bitpix=bitpix)
+    m.mConvert(os.path.join(output_dir, 'mosaic64_area.fits'),
+               os.path.join(output_dir, 'mosaic_area.fits'),
+               bitpix=bitpix)
 
-    os.remove(output_dir + "mosaic64.fits")
-    os.remove(output_dir + "mosaic64_area.fits")
+    os.remove(os.path.join(output_dir, "mosaic64.fits"))
+    os.remove(os.path.join(output_dir, "mosaic64_area.fits"))
 
     _finalize(cleanup, work_dir)
