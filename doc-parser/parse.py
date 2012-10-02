@@ -136,6 +136,26 @@ def required_argument_name(command, argument):
     else:
         raise Exception("Don't know what to do with %s for %s" % (argument, command))
 
+# All variables default to str unless listed below
+
+INT_ARGS = ['debug_level', 'bitpix', 'min_val', 'max_val', 'blank_value',
+            'n_iter', 'size', 'n_tile_x', 'n_tile_y', 'border', 'ixpix',
+            'jypix', 'xstartpix', 'ystartpix', 'xpixsize', 'ypixsize',
+            'max_iter', 'n_x', 'n_y', 'ix', 'iy', 'xpad', 'ypad']
+
+FLOAT_ARGS = ['width', 'height', 'xsize', 'ysize', 'factor', 'ra', 'dec',
+              'ref_mag', 'nan_value', 'min_blank', 'max_blank', 'hdu',
+              'pix_size', 'rotation', 'rotation_angle', 'cdelt', 'factor',
+              'scale', 'threshold', 'tolerance']
+
+def get_type(parameter):
+    if parameter in INT_ARGS:
+        return 'int'
+    elif parameter in FLOAT_ARGS:
+        return 'float'
+    else:
+        return 'str'
+
 # Construct text wrapper for docstring
 docwrapper = textwrap.TextWrapper(
                 initial_indent=" " * 8, subsequent_indent=" " * 8, width=78)
@@ -280,7 +300,7 @@ for api_file in glob.glob(os.path.join('api/', '*.html')):
             default = 'None'
             optional_arguments += ', %s=%s' % (variable, default)
 
-            optional_docstring += '\n    %s : value, optional\n' % variable + docwrapper.fill(option_description) + '\n'
+            optional_docstring += '\n    %s : %s, optional\n' % (variable, get_type(variable)) + docwrapper.fill(option_description) + '\n'
 
             code += '    if %s:\n        command += " %s %%s" %% str(%s)\n' % (variable, option[0], variable)
 
@@ -311,7 +331,7 @@ for api_file in glob.glob(os.path.join('api/', '*.html')):
 
                 code += pad + '        command += " %%s" %% str(%s)\n' % variable
 
-            optional_docstring += '\n    %s : value, optional\n' % variables[:-2] + docwrapper.fill(option_description) + '\n'
+            optional_docstring += '\n    %s : %s, optional\n' % (variables[:-2], get_type(variables[:-2])) + docwrapper.fill(option_description) + '\n'
 
         elif option[0][0] != '-':
 
@@ -329,7 +349,7 @@ for api_file in glob.glob(os.path.join('api/', '*.html')):
                 else:
                     code += '    command += " " + str(%s)\n' % variable
 
-            required_docstring += '\n    %s : value\n' % variables[:-2] + docwrapper.fill(option_description) + '\n'
+            required_docstring += '\n    %s : %s\n' % (variables[:-2], get_type(variables[:-2])) + docwrapper.fill(option_description) + '\n'
 
     if command in mpi_enabled:
 
