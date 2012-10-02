@@ -24,14 +24,14 @@ def reproject_hdu(in_hdu, **kwargs):
     '''
     Reproject an image (HDU version)
 
-    Required Arguments
+    Parameters
+    ----------
+    in_hdu : `~astropy.io.fits.PrimaryHDU` or `~astropy.io.fits.ImageHDU`
+        Input FITS HDU to be reprojected.
 
-        *in_hdu* [ astropy.io.fits HDU ]
-            Input FITS file to be reprojected.
-
-    Optional Arguments
-
-        See reproject(...)
+    Notes
+    -----
+    Additional keyword arguments are passed to `~montage.wrappers.reproject`
     '''
 
     # Make work directory
@@ -62,46 +62,44 @@ def reproject_cube(in_image, out_image, header=None, bitpix=None,
     not set, a new header is computed by taking into account the
     north_aligned, system, and equinox arguments (if set).
 
-    Required Arguments
+    Parameters
+    ----------
 
-        *in_image* [ string ]
-            Path of input FITS file to be reprojected.
+    in_image : str
+        Path of input FITS file to be reprojected.
 
-        *out_image* [ string ]
-            Path of output FITS file to be created.
+    out_image : str
+        Path of output FITS file to be created.
 
-    Optional Arguments
+    header : str, optional
+        Path to the header file to use for re-projection.
 
-        *header* [ string ]
-            Path to the header file to use for re-projection.
+    bitpix : int, optional
+        BITPIX value for the ouput FITS file (default is -64). Possible
+        values are: 8 (character or unsigned binary integer), 16 (16-bit
+        integer), 32 (32-bit integer), -32 (single precision floating
+        point), -64 (double precision floating point).
 
-        *bitpix* [ value ]
-            BITPIX value for the ouput FITS file (default is -64). Possible
-            values are: 8 (character or unsigned binary integer), 16 (16-bit
-            integer), 32 (32-bit integer), -32 (single precision floating
-            point), -64 (double precision floating point).
+    north_aligned : bool, optional
+        Align the pixel y-axis with North
 
-        *north_aligned* [ True | False ]
-            Align the pixel y-axis with North
+    system : str, optional
+        Specifies the coordinate system
+        Possible values are: 'EQUJ', 'EQUB', 'ECLJ', 'ECLB', 'GAL', 'SGAL'
 
-        *system* [ value ]
-            Specifies the coordinate system
-            Possible values are: EQUJ EQUB ECLJ ECLB GAL SGAL
+    equinox : str, optional
+        If a coordinate system is specified, the equinox can also be given
+        in the form 'YYYY'. Default is 'J2000'.
 
-        *equinox* [ value ]
-            If a coordinate system is specified, the equinox can also be given
-            in the form YYYY. Default is J2000.
+    factor : float, optional
+        Drizzle factor (see `~montage.commands.mProject`)
 
-        *factor* [ value ]
-            Drizzle factor (see mProject)
+    clobber : bool, optional
+        Overwrite the data cube if it already exists?
 
-        *clobber* [ True | False ]  (default False)
-            Overwrite the data cube if it already exists?
-
-        *silent_cleanup* [ True | False ]  (default True)
-            Hide messages related to tmp directory removal (there will be one
-            for each plane of the cube if set to False)
-
+    silent_cleanup : bool, optional
+        Hide messages related to tmp directory removal (there will be one
+        for each plane of the cube if set to False)
     '''
 
     if header:
@@ -222,54 +220,51 @@ def reproject(in_images, out_images, header=None, bitpix=None,
     then a header is computed for each individual image, whereas if
     common=True, an optimal header is computed for all images.
 
-    Required Arguments
+    Parameters
+    ----------
 
-        *in_images* [ string | tuple or list of strings ]
-            Path(s) of input FITS file(s) to be reprojected.
+    in_images : str or list
+        Path(s) of input FITS file(s) to be reprojected.
 
-        *out_images* [ string | tuple or list of strings ]
-            Path(s) of output FITS file(s) to be created.
+    out_images : str or list
+        Path(s) of output FITS file(s) to be created.
 
-    Optional Arguments
+    header : str, optional
+        Path to the header file to use for re-projection.
 
-        *header* [ string ]
-            Path to the header file to use for re-projection.
+    bitpix : int, optional
+        BITPIX value for the ouput FITS file (default is -64). Possible
+        values are: 8 (character or unsigned binary integer), 16 (16-bit
+        integer), 32 (32-bit integer), -32 (single precision floating
+        point), -64 (double precision floating point).
 
-        *bitpix* [ value ]
-            BITPIX value for the ouput FITS file (default is -64). Possible
-            values are: 8 (character or unsigned binary integer), 16 (16-bit
-            integer), 32 (32-bit integer), -32 (single precision floating
-            point), -64 (double precision floating point).
+    north_aligned : bool, optional
+        Align the pixel y-axis with North
 
-        *north_aligned* [ True | False ]
-            Align the pixel y-axis with North
+    system : str, optional
+        Specifies the coordinate system
+        Possible values are: 'EQUJ', 'EQUB', 'ECLJ', 'ECLB', 'GAL', 'SGAL'
 
-        *system* [ value ]
-            Specifies the coordinate system
-            Possible values are: EQUJ EQUB ECLJ ECLB GAL SGAL
+    equinox : str, optional
+        If a coordinate system is specified, the equinox can also be given
+        in the form 'YYYY'. Default is 'J2000'.
 
-        *equinox* [ value ]
-            If a coordinate system is specified, the equinox can also be given
-            in the form YYYY. Default is J2000.
+    factor : float, optional
+        Drizzle factor (see `~montage.commands.mProject`)
 
-        *factor* [ value ]
-            Drizzle factor (see mProject)
+    exact_size : bool, optional
+        Whether to reproject the image(s) to the exact header specified
+        (i.e. whether cropping is unacceptable).
 
-        *exact_size* [ True | False ]
-            Whether to reproject the image(s) to the exact header specified
-            (i.e. whether cropping is unacceptable).
+    hdu : int, optional
+        The HDU to use in the file(s)
 
-        *hdu* [ value ]
-            The HDU to use in the file(s)
+    silent_cleanup : bool, optional
+        Hide messages related to tmp directory removal
 
-        *silent_cleanup* [ True | False ]  (default False)
-            Hide messages related to tmp directory removal
-
-    Optional Arguments (multiple files only)
-
-        *common* [ string ]
-            Compute a common optimal header for all images (only used if
-            header=None)
+    common : str, optional
+        Compute a common optimal header for all images (only used if
+        header=None and if multiple files are being reprojected)
     '''
 
     if type(in_images) == str and type(out_images) == str:
@@ -361,6 +356,63 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
            background_match=False, imglist=None, combine="mean",
            exact_size=False, cleanup=True, bitpix=-32, level_only=True,
            work_dir=None):
+    """
+    Combine FITS files into a mosaic
+
+    Parameters
+    ----------
+
+    input_dir : str
+        The directory containing the input FITS files
+
+    output_dir : str
+        The output directory to create
+
+    header : str, optional
+        The header to project to. If this is not specified, then an optimal
+        header is chosen.
+
+    mpi : bool, optional
+        Whether to use MPI whenever possible (requires the MPI-enabled
+        Montage binaries to be installed).
+
+    n_proc : int, optional
+        The number of processes to use if `mpi` is set to `True`
+
+    background_match : bool, optional
+        Whether to include a background-matching step
+
+    imglist : str, optional
+        A list of images to use (useful if not all the files inside
+        `input_dir` should be combined).
+
+    combine : str, optional
+        How to combine the images - this should be one of ``'mean'``,
+        ``'median'``, or ``'count'``.
+
+    exact_size : bool, optional
+        Whether the output mosaic should match the input header exactly, or
+        whether the mosaic should be trimmed if possible.
+
+    clenup : bool, optional
+        Whether to remove any temporary directories used for mosaicking
+
+    bitpix : int, optional
+        BITPIX value for the ouput FITS file (default is -64). Possible
+        values are: 8 (character or unsigned binary integer), 16 (16-bit
+        integer), 32 (32-bit integer), -32 (single precision floating
+        point), -64 (double precision floating point).
+
+    level_only : bool, optional
+        When doing background matching, whether to only allow changes in the
+        level of frames, not the slope.
+
+    work_dir : str, optional
+        The temporary directory to use for the mosaicking. By default, this
+        is a temporary directory in a system-defined location, but it can be
+        useful to specify this manually for debugging purposes.
+    """
+
 
     if not combine in ['mean', 'median', 'count']:
         raise Exception("combine should be one of mean/median/count")
