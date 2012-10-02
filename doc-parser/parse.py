@@ -150,7 +150,7 @@ descwrapper = textwrap.TextWrapper(
 
 # Open output file
 fo = open('commands.py', 'wb')
-fo.write('import subprocess\nimport status\nimport shlex\n\n')
+fo.write('import subprocess\nimport status\nimport shlex\nfrom .commands_extra import *\n')
 
 # Cycle through API files
 for api_file in glob.glob(os.path.join('api/', '*.html')):
