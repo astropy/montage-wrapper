@@ -138,7 +138,7 @@ def required_argument_name(command, argument):
 
 # Construct text wrapper for docstring
 docwrapper = textwrap.TextWrapper(
-                initial_indent=" " * 12, subsequent_indent=" " * 12, width=78)
+                initial_indent=" " * 8, subsequent_indent=" " * 8, width=78)
 
 # Construct text wrapper for function declaration
 defwrapper = textwrap.TextWrapper(
@@ -269,7 +269,7 @@ for api_file in glob.glob(os.path.join('api/', '*.html')):
 
             optional_arguments += ', %s=False' % variable
 
-            optional_docstring += '\n        *%s* [ True | False ]\n' % variable + docwrapper.fill(option_description) + '\n'
+            optional_docstring += '\n    %s : bool, optional\n' % variable + docwrapper.fill(option_description) + '\n'
 
             code += '    if %s:\n        command += " %s"\n' % (variable, option[0])
 
@@ -280,7 +280,7 @@ for api_file in glob.glob(os.path.join('api/', '*.html')):
             default = 'None'
             optional_arguments += ', %s=%s' % (variable, default)
 
-            optional_docstring += '\n        *%s* [ value ]\n' % variable + docwrapper.fill(option_description) + '\n'
+            optional_docstring += '\n    %s : value, optional\n' % variable + docwrapper.fill(option_description) + '\n'
 
             code += '    if %s:\n        command += " %s %%s" %% str(%s)\n' % (variable, option[0], variable)
 
@@ -311,7 +311,7 @@ for api_file in glob.glob(os.path.join('api/', '*.html')):
 
                 code += pad + '        command += " %%s" %% str(%s)\n' % variable
 
-            optional_docstring += '\n        *%s* [ value ]\n' % variables[:-2] + docwrapper.fill(option_description) + '\n'
+            optional_docstring += '\n    %s : value, optional\n' % variables[:-2] + docwrapper.fill(option_description) + '\n'
 
         elif option[0][0] != '-':
 
@@ -329,13 +329,13 @@ for api_file in glob.glob(os.path.join('api/', '*.html')):
                 else:
                     code += '    command += " " + str(%s)\n' % variable
 
-            required_docstring += '\n        *%s* [ value ]\n' % variables[:-2] + docwrapper.fill(option_description) + '\n'
+            required_docstring += '\n    %s : value\n' % variables[:-2] + docwrapper.fill(option_description) + '\n'
 
     if command in mpi_enabled:
 
         optional_arguments += ', mpi=False, n_proc=8'
-        optional_docstring += '\n        *mpi* [ True | False ]\n' + docwrapper.fill(mpi_description) + '\n'
-        optional_docstring += '\n        *n_proc* [ value ]\n' + docwrapper.fill(nproc_description) + '\n'
+        optional_docstring += '\n    mpi : bool, optional\n' + docwrapper.fill(mpi_description) + '\n'
+        optional_docstring += '\n    n_proc : int, optional\n' + docwrapper.fill(nproc_description) + '\n'
 
     arguments = 'def %s(%s%s):' % (command, required_arguments[2:], optional_arguments)
     arguments = '\n' + defwrapper.fill(arguments) + '\n'
@@ -344,11 +344,15 @@ for api_file in glob.glob(os.path.join('api/', '*.html')):
 
     docstring = "    '''\n%s\n" % description
 
+    if len(required_docstring.strip()) > 0 or len(optional_docstring.strip()) > 0:
+        docstring += "\n    Parameters"
+        docstring += "\n    ----------\n"
+
     if len(required_docstring.strip()) > 0:
-        docstring += "\n    Required Arguments:\n%s" % required_docstring
+        docstring += required_docstring
 
     if len(optional_docstring.strip()) > 0:
-        docstring += "\n    Optional Arguments:\n%s" % optional_docstring
+        docstring += optional_docstring
 
     docstring += "    '''\n"
 
