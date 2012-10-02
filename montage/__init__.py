@@ -84,8 +84,8 @@ def test(package=None, test_path=None, args=None, plugins=None,
         remote_data=remote_data, pep8=pep8, pdb=pdb,
         coverage=coverage, **kwargs)
 
-from commands import *
-from wrappers import *
+from .commands import *
+from .wrappers import *
 
 # Check whether Montage is installed
 installed = False

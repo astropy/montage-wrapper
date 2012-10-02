@@ -1,7 +1,7 @@
 import subprocess
 import status
 import shlex
-from commands_extra import *
+from .commands_extra import *
 
 def mAdd(images_table, template_header, out_image, img_dir=None,
           no_area=False, type=None, exact=False, debug_level=None,

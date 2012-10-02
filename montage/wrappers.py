@@ -4,8 +4,10 @@ import shutil as sh
 import warnings
 import tempfile
 
-import commands as m
-from status import MontageError
+from astropy.io import fits
+
+from . import commands as m
+from .status import MontageError
 
 
 def _finalize(cleanup, work_dir, silence=False):
@@ -18,186 +20,175 @@ def _finalize(cleanup, work_dir, silence=False):
         if not silence: print "Leaving work directory %s" % work_dir
 
 
-try:
+def reproject_hdu(in_hdu, **kwargs):
+    '''
+    Reproject an image (HDU version)
 
-    import pyfits
+    Required Arguments
 
-    def reproject_hdu(in_hdu, **kwargs):
-        '''
-        Reproject an image (HDU version)
+        *in_hdu* [ astropy.io.fits HDU ]
+            Input FITS file to be reprojected.
 
-        Required Arguments
+    Optional Arguments
 
-            *in_hdu* [ pyfits HDU ]
-                Input FITS file to be reprojected.
+        See reproject(...)
+    '''
 
-        Optional Arguments
+    # Make work directory
+    work_dir = tempfile.mkdtemp() + '/'
 
-            See reproject(...)
-        '''
+    in_image = work_dir + '/in.fits'
+    out_image = work_dir + '/out.fits'
 
-        # Make work directory
-        work_dir = tempfile.mkdtemp() + '/'
+    fits.writeto(in_image, in_hdu.data, in_hdu.header)
 
-        in_image = work_dir + '/in.fits'
-        out_image = work_dir + '/out.fits'
+    reproject(in_image, out_image, **kwargs)
 
-        pyfits.writeto(in_image, in_hdu.data, in_hdu.header)
+    out_hdu = fits.open(out_image)[0]
 
-        reproject(in_image, out_image, **kwargs)
+    return out_hdu
 
-        out_hdu = pyfits.open(out_image)[0]
 
-        return out_hdu
+import numpy
 
-except:
-    pass
+def reproject_cube(in_image, out_image, header=None, bitpix=None,
+    north_aligned=False, system=None, equinox=None, factor=None, common=False,
+    cleanup=True, clobber=False, silent_cleanup=True):
+    '''
+    Cube reprojection routine.
 
-try:
+    If one input/output image is specified, and the header argument is set,
+    the routine is equivalent to using mProject or mProjectPP. If header= is
+    not set, a new header is computed by taking into account the
+    north_aligned, system, and equinox arguments (if set).
 
-    import numpy
+    Required Arguments
 
-    def reproject_cube(in_image, out_image, header=None, bitpix=None,
-        north_aligned=False, system=None, equinox=None, factor=None, common=False,
-        cleanup=True, clobber=False, silent_cleanup=True):
-        '''
-        Cube reprojection routine.
+        *in_image* [ string ]
+            Path of input FITS file to be reprojected.
 
-        If one input/output image is specified, and the header argument is set,
-        the routine is equivalent to using mProject or mProjectPP. If header= is
-        not set, a new header is computed by taking into account the
-        north_aligned, system, and equinox arguments (if set).
+        *out_image* [ string ]
+            Path of output FITS file to be created.
 
-        Required Arguments
+    Optional Arguments
 
-            *in_image* [ string ]
-                Path of input FITS file to be reprojected.
+        *header* [ string ]
+            Path to the header file to use for re-projection.
 
-            *out_image* [ string ]
-                Path of output FITS file to be created.
+        *bitpix* [ value ]
+            BITPIX value for the ouput FITS file (default is -64). Possible
+            values are: 8 (character or unsigned binary integer), 16 (16-bit
+            integer), 32 (32-bit integer), -32 (single precision floating
+            point), -64 (double precision floating point).
 
-        Optional Arguments
+        *north_aligned* [ True | False ]
+            Align the pixel y-axis with North
 
-            *header* [ string ]
-                Path to the header file to use for re-projection.
+        *system* [ value ]
+            Specifies the coordinate system
+            Possible values are: EQUJ EQUB ECLJ ECLB GAL SGAL
 
-            *bitpix* [ value ]
-                BITPIX value for the ouput FITS file (default is -64). Possible
-                values are: 8 (character or unsigned binary integer), 16 (16-bit
-                integer), 32 (32-bit integer), -32 (single precision floating
-                point), -64 (double precision floating point).
+        *equinox* [ value ]
+            If a coordinate system is specified, the equinox can also be given
+            in the form YYYY. Default is J2000.
 
-            *north_aligned* [ True | False ]
-                Align the pixel y-axis with North
+        *factor* [ value ]
+            Drizzle factor (see mProject)
 
-            *system* [ value ]
-                Specifies the coordinate system
-                Possible values are: EQUJ EQUB ECLJ ECLB GAL SGAL
+        *clobber* [ True | False ]  (default False)
+            Overwrite the data cube if it already exists?
 
-            *equinox* [ value ]
-                If a coordinate system is specified, the equinox can also be given
-                in the form YYYY. Default is J2000.
+        *silent_cleanup* [ True | False ]  (default True)
+            Hide messages related to tmp directory removal (there will be one
+            for each plane of the cube if set to False)
 
-            *factor* [ value ]
-                Drizzle factor (see mProject)
+    '''
 
-            *clobber* [ True | False ]  (default False)
-                Overwrite the data cube if it already exists?
+    if header:
+        if north_aligned or system or equinox:
+            warnings.warn("header= is set, so north_aligned=, system=, and equinox= will be ignored")
 
-            *silent_cleanup* [ True | False ]  (default True)
-                Hide messages related to tmp directory removal (there will be one
-                for each plane of the cube if set to False)
+    # Find path to input and output file
+    in_image = os.path.abspath(in_image)
+    out_image = os.path.abspath(out_image)
 
-        '''
+    if os.path.exists(out_image) and not clobber:
+        raise IOError( "File '%s' already exists and clobber=False." % out_image )
 
-        if header:
-            if north_aligned or system or equinox:
-                warnings.warn("header= is set, so north_aligned=, system=, and equinox= will be ignored")
+    # Make work directory
+    work_dir = tempfile.mkdtemp() + '/'
 
-        # Find path to input and output file
-        in_image = os.path.abspath(in_image)
-        out_image = os.path.abspath(out_image)
+    # Set paths
 
-        if os.path.exists(out_image) and not clobber:
-            raise IOError( "File '%s' already exists and clobber=False." % out_image )
+    raw_dir = work_dir + 'raw/'
+    final_dir = work_dir + 'final/'
 
-        # Make work directory
-        work_dir = tempfile.mkdtemp() + '/'
+    if header:
+        header_hdr = os.path.abspath(header)
+    else:
+        header_hdr = work_dir + 'header.hdr'
 
-        # Set paths
+    images_raw_tbl = work_dir + 'images_raw.tbl'
+    images_tmp_tbl = work_dir + 'images_tmp.tbl'
 
-        raw_dir = work_dir + 'raw/'
-        final_dir = work_dir + 'final/'
+    # Create raw directory
+    os.mkdir(raw_dir)
+    os.mkdir(final_dir)
 
-        if header:
-            header_hdr = os.path.abspath(header)
-        else:
-            header_hdr = work_dir + 'header.hdr'
+    # Make new header
+    if not header:
+        m.mMakeHdr(images_raw_tbl, header_hdr, north_aligned=north_aligned,
+            system=system, equinox=equinox)
 
-        images_raw_tbl = work_dir + 'images_raw.tbl'
-        images_tmp_tbl = work_dir + 'images_tmp.tbl'
+    cubefile = fits.open(in_image)
+    if len(cubefile[0].data.shape) != 3 or cubefile[0].header.get('NAXIS') != 3:
+        raise Exception("Cube file must have 3 dimensions")
 
-        # Create raw directory
-        os.mkdir(raw_dir)
-        os.mkdir(final_dir)
+    # a temporary HDU that will be used to hold different data each time
+    # and reproject each plane separately
+    planefile = fits.PrimaryHDU(data=cubefile[0].data[0,:,:],
+            header=cubefile[0].header)
 
-        # Make new header
-        if not header:
-            m.mMakeHdr(images_raw_tbl, header_hdr, north_aligned=north_aligned,
-                system=system, equinox=equinox)
+    # generate a blank HDU to store the eventual projected cube
 
-        cubefile = pyfits.open(in_image)
-        if len(cubefile[0].data.shape) != 3 or cubefile[0].header.get('NAXIS') != 3:
-            raise Exception("Cube file must have 3 dimensions")
+    # first must remove END card from .hdr file
+    header_temp = header_hdr.replace(".hdr","_tmp.hdr")
+    headerlines = open(header_hdr,'r').readlines()[:-1]
+    w = open(header_temp,'w')
+    w.writelines([line for line in headerlines])
+    w.close()
 
-        # a temporary HDU that will be used to hold different data each time
-        # and reproject each plane separately
-        planefile = pyfits.PrimaryHDU(data=cubefile[0].data[0,:,:],
-                header=cubefile[0].header)
+    # when creating the new header, allow the 3rd axis to be
+    # set by the input data cube
+    newheader = fits.Header()
+    newheader.fromTxtFile(header_temp)
+    blank_data = numpy.zeros(
+            [cubefile[0].header.get('NAXIS3'),
+            newheader.get('NAXIS2'),
+            newheader.get('NAXIS1')]
+            )
+    newcube = fits.PrimaryHDU(data=blank_data,header=newheader)
 
-        # generate a blank HDU to store the eventual projected cube
+    for ii, plane in enumerate(cubefile[0].data):
 
-        # first must remove END card from .hdr file
-        header_temp = header_hdr.replace(".hdr","_tmp.hdr")
-        headerlines = open(header_hdr,'r').readlines()[:-1]
-        w = open(header_temp,'w')
-        w.writelines([line for line in headerlines])
-        w.close()
+        os.mkdir(final_dir + '%i' % ii)
 
-        # when creating the new header, allow the 3rd axis to be
-        # set by the input data cube
-        newheader = pyfits.Header()
-        newheader.fromTxtFile(header_temp)
-        blank_data = numpy.zeros(
-                [cubefile[0].header.get('NAXIS3'),
-                newheader.get('NAXIS2'),
-                newheader.get('NAXIS1')]
-                )
-        newcube = pyfits.PrimaryHDU(data=blank_data,header=newheader)
+        # reset the data plane within the temporary HDU
+        planefile.data = plane
 
-        for ii, plane in enumerate(cubefile[0].data):
+        # reproject the individual plane - exact size MUST be specified so that the
+        # data can be put into the specified cube
+        reprojected = reproject_hdu(planefile, header=header_hdr,
+                exact_size=True, factor=factor, bitpix=bitpix,
+                silent_cleanup=silent_cleanup)
 
-            os.mkdir(final_dir + '%i' % ii)
+        newcube.data[ii,:,:] = reprojected.data
 
-            # reset the data plane within the temporary HDU
-            planefile.data = plane
+    newcube.writeto(out_image,clobber=clobber)
 
-            # reproject the individual plane - exact size MUST be specified so that the
-            # data can be put into the specified cube
-            reprojected = reproject_hdu(planefile, header=header_hdr,
-                    exact_size=True, factor=factor, bitpix=bitpix,
-                    silent_cleanup=silent_cleanup)
+    _finalize(cleanup, work_dir)
 
-            newcube.data[ii,:,:] = reprojected.data
-
-        newcube.writeto(out_image,clobber=clobber)
-
-        _finalize(cleanup, work_dir)
-
-        return
-
-except:
-    pass
+    return
 
 
 def mProject_auto(*args, **kwargs):
