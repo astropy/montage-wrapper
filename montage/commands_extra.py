@@ -14,57 +14,60 @@ def mCoverageCheck(in_table, out_table, mode, polygon=None, ra=None,
     table represent images that overlap with a region definition (box or
     circle in the sky) given on the command line.
 
-    Required Arguments:
+    Parameters
+    ----------
 
-        *in_table* [ value ]
-            Input metadata table.
+    in_table : str
+        Input metadata table.
 
-        *out_table* [ value ]
-            Output metadata table, to contain subset of in_table.
+    out_table : str
+        Output metadata table, to contain subset of in_table.
 
-        *mode* [ 'points' | 'box' | 'circle' | 'header' | 'point' | 'cutout' ]
-            How to check for coverage:
+    mode : str
+        How to check for coverage:
 
-            - points: use a polygon with points specified by polygon=
-            
-            - box: use a rectangular box with center given by ra= and
-              dec=, and the width given by width=. Optionally, the
-              height and rotation can be given by height= and rotation=
+        - 'points': use a polygon with points specified by polygon=
 
-            - circle: use a circle with center given by ra= and dec= and
-              radius given by radius=
+        - 'box': use a rectangular box with center given by ra= and
+          dec=, and the width given by width=. Optionally, the
+          height and rotation can be given by height= and rotation=
 
-            - point: use a point given by ra= and dec=
-            
-            - header: use a header file given by header=
+        - 'circle': use a circle with center given by ra= and dec= and
+          radius given by radius=
 
-    Optional Arguments:
+        - 'point': use a point given by ra= and dec=
 
-        *polygon* [ list of tuples ]
-            A polygon which should be given as [(ra1, dec1), (ra2,
-            dec2), ..., (raN, decN)].
+        - 'header': use a header file given by header=
 
-        *ra, dec* [ value ]
-            The coordinates of the box, circle, or point
+    polygon : list
+        A polygon which should be given as [(ra1, dec1), (ra2,
+        dec2), ..., (raN, decN)].
 
-        *width* [ value ]
-            The width of the box
+    ra : float, optional
+        The right ascension of the box, circle, or point
 
-        *height* [ value ]
-            The height of the box
+    dec : float, optional
+        The declination of the box, circle, or point
 
-        *rotation* [ value ]
-            The rotation of the box
+    width : float, optional
+        The width of the box
 
-        *radius* [ value ]
-            The radius of the circle
+    height : float, optional
+        The height of the box
 
-        *header* [ value ]
-            A header file
+    rotation : float, optional
+        The rotation of the box
 
-        *status_file* [ value ]
-            Output and errors are sent to status_file instead of to stdout
+    radius : float, optional
+        The radius of the circle
+
+    header : str, optional
+        A header file
+
+    status_file : str, optional
+        Output and errors are sent to status_file instead of to stdout
     '''
+
     command = "mCoverageCheck"
     if status_file:
         command += " -s %s" % str(status_file)
