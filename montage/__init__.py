@@ -1,5 +1,7 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 
+from __future__ import print_function
+
 try:
     from .version import version as __version__
 except ImportError:
@@ -94,5 +96,30 @@ for dir in os.environ['PATH'].split(':'):
         installed = True
         break
 
+import textwrap
+
+error_wrap = textwrap.TextWrapper(initial_indent=" " * 11,
+                                  subsequent_indent=" " * 11,
+                                  width=72)
+
+MONTAGE_MISSING = """ERROR: Montage commands could not be found.
+
+In order to use the python-montage module, you will first need to
+install the IPAC Montage software from:
+
+    http://montage.ipac.caltech.edu
+
+and ensure that the Montage commands (e.g. mAdd, mProject, etc.) are in
+your $PATH. Your current $PATH variable contains the following paths,
+but none of them contain the Montage commands:
+
+    PATH = {path}
+
+If the Montage commands are in one of these directories, then please
+report this as an issue with python-montage.
+""".format(path=error_wrap.fill(os.environ['PATH']).strip())
+
 if not installed:
-    raise Exception("Montage commands are not in your PATH")
+    print(MONTAGE_MISSING)
+    import sys
+    sys.exit(1)

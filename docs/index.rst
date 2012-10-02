@@ -15,8 +15,9 @@ Installation
 
 Python-montage is a wrapper, not a replacement, for the IPAC Montage
 mosaicking software. Therefore, Montage will need to be installed (see
-`http://montage.ipac.caltech.edu `_ for more details). Once the IPAC Montage
-package is installed, you can install python-montage with::
+`http://montage.ipac.caltech.edu <http://montage.ipac.caltech.edu>`_ for
+more details). Once the IPAC Montage package is installed, you can install
+python-montage with::
 
     python setup.py install
 

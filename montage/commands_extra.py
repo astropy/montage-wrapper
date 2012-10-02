@@ -5,6 +5,7 @@ import subprocess
 import status
 import shlex
 
+
 def mCoverageCheck(in_table, out_table, mode, polygon=None, ra=None,
                    dec=None, width=None, height=None, rotation=None,
                    radius=None, header=None, status_file=None):
