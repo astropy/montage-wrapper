@@ -321,7 +321,7 @@ def reproject(in_images, out_images, header=None, bitpix=None,
     # Link to images
     for i, in_image in enumerate(in_images):
         os.mkdir(os.path.join(raw_dir, '%i' % i))
-        os.symlink(in_image, os.path.join(raw_dir, '%i' % i , 'image.fits'))
+        os.symlink(in_image, os.path.join(raw_dir, '%i' % i, 'image.fits'))
 
     # Make image table
     m.mImgtbl(raw_dir, images_raw_tbl, corners=True, recursive=True)
