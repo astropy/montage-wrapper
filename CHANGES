@@ -2,7 +2,8 @@ CHANGES
 
   Version 0.9.4
 
-    - python-montage is now an Astropy affiliated package
+    - python-montage is now an Astropy affiliated package, and has been
+      renamed to montage_wrapper.
 
   Version 0.9.3
 

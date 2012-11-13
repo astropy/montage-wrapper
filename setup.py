@@ -26,8 +26,8 @@ from astropy import setup_helpers
 from astropy.version_helper import get_git_devstr, generate_version_py
 
 # Set affiliated package-specific settings
-PACKAGENAME = 'montage'
-DESCRIPTION = 'python-montage - a python Montage wrapper'
+PACKAGENAME = 'montage_wrapper'
+DESCRIPTION = 'Python wrapper for the Montage mosaicking toolkit'
 LONG_DESCRIPTION = ''
 AUTHOR = 'Thomas Robitaille'
 AUTHOR_EMAIL = 'thomas.robitaille@gmail.com'

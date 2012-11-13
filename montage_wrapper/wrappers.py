@@ -36,7 +36,7 @@ def reproject_hdu(in_hdu, **kwargs):
 
     Notes
     -----
-    Additional keyword arguments are passed to :func:`~montage.wrappers.reproject`
+    Additional keyword arguments are passed to :func:`~montage_wrapper.wrappers.reproject`
     '''
 
     # Make work directory
@@ -95,7 +95,7 @@ def reproject_cube(in_image, out_image, header=None, bitpix=None,
         in the form 'YYYY'. Default is 'J2000'.
 
     factor : float, optional
-        Drizzle factor (see `~montage.commands.mProject`)
+        Drizzle factor (see `~montage_wrapper.commands.mProject`)
 
     clobber : bool, optional
         Overwrite the data cube if it already exists?
@@ -253,7 +253,7 @@ def reproject(in_images, out_images, header=None, bitpix=None,
         in the form 'YYYY'. Default is 'J2000'.
 
     factor : float, optional
-        Drizzle factor (see `~montage.commands.mProject`)
+        Drizzle factor (see `~montage_wrapper.commands.mProject`)
 
     exact_size : bool, optional
         Whether to reproject the image(s) to the exact header specified

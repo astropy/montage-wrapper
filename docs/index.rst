@@ -5,19 +5,18 @@ Python Montage wrapper
 Introduction
 ============
 
-Python-montage is a pure python module that provides a python wrapper to the
-Montage Astronomical Image Mosaic Engine, including both functions to access
-individual Montage commands, and high-level functions to facilitate
-mosaicking and re-projecting.
+This package provides a python wrapper to the Montage Astronomical Image
+Mosaic Engine, including both functions to access individual Montage commands,
+and high-level functions to facilitate mosaicking and re-projecting.
 
 Installation
 ============
 
-Python-montage is a wrapper, not a replacement, for the IPAC Montage
-mosaicking software. Therefore, Montage will need to be installed (see
-`http://montage.ipac.caltech.edu <http://montage.ipac.caltech.edu>`_ for
-more details). Once the IPAC Montage package is installed, you can install
-python-montage with::
+This package is a wrapper, not a replacement, for the IPAC Montage mosaicking
+software. Therefore, Montage will need to be installed (see
+`http://montage.ipac.caltech.edu <http://montage.ipac.caltech.edu>`_ for more
+details). Once the IPAC Montage package is installed, you can install the
+montage wrapper with::
 
     python setup.py install
 
@@ -30,17 +29,21 @@ Using `montage`
 Montage commands
 ----------------
 
-The python-montage module is imported using::
+The montage wrapper is imported using::
 
-    import montage
+    import montage_wrapper
+
+or, for clarity::
+
+    import montage_wrapper as montage
 
 All Montage commands (except ``mJPEG``, ``mMakeImg``, and ``mTileImage``)
 are accessible via Python functions. For example, to access ``mProject``, use::
 
     montage.mProject(...)
 
-and see :func:`~montage.commands.mProject` for available options. Each
-Montage command returns a :class:`~montage.status.Struct` object that
+and see :func:`~montage_wrapper.commands.mProject` for available options. Each
+Montage command returns a :class:`~montage_wrapper.status.Struct` object that
 contains information/diagnostics. The following example shows how to use the
 Montage command wrappers, and how to access the diagnostics::
 
@@ -76,9 +79,9 @@ High-level functions
 
 In addition to wrappers to the individual Montage commands, the following high-level functions are available:
 
-* `~montage.wrappers.reproject`: reproject a FITS file
-* `~montage.wrappers.reproject_hdu`: reproject an FITS HDU object
-* `~montage.wrappers.mosaic`: mosaic all FITS files in a directory
+* `~montage_wrapper.wrappers.reproject`: reproject a FITS file
+* `~montage_wrapper.wrappers.reproject_hdu`: reproject an FITS HDU object
+* `~montage_wrapper.wrappers.mosaic`: mosaic all FITS files in a directory
 
 For example, to mosaic all FITS files in a directory called `raw` using background matching, use:
 
@@ -93,7 +96,7 @@ MPI
 ---
 
 A few Montage commands can be run using MPI for parallelization (see here).
-For MPI-enabled commands (such as `~montage.commands.mProjExec`), the use of
+For MPI-enabled commands (such as `~montage_wrapper.commands.mProjExec`), the use of
 MPI is controlled via the mpi= argument. For example, to call ``mProjExec``
 using MPI, call ``montage.mProjExec(..., mpi=True)`` (rather than
 ``montage.mProjExecMPI``, which does not exist).
@@ -101,5 +104,6 @@ using MPI, call ``montage.mProjExec(..., mpi=True)`` (rather than
 Reference/API
 =============
 
-.. automodapi:: montage.wrappers
-.. automodapi:: montage.commands
+.. automodapi:: montage_wrapper.wrappers
+.. automodapi:: montage_wrapper.commands
+.. automodapi:: montage_wrapper.status

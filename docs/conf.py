@@ -46,7 +46,7 @@ rst_epilog += """
 # -- Project information ------------------------------------------------------
 
 # This does not *have* to match the package name, but typically does
-project = u'montage'
+project = u'montage_wrapper'
 author = u'Thomas Robitaille'
 copyright = u'2012, ' + author
 
@@ -54,11 +54,11 @@ copyright = u'2012, ' + author
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 
-import montage
+import montage_wrapper
 # The short X.Y version.
-version = montage.__version__.split('-', 1)[0]
+version = montage_wrapper.__version__.split('-', 1)[0]
 # The full version, including alpha/beta/rc tags.
-release = montage.__version__
+release = montage_wrapper.__version__
 
 
 # -- Options for HTML output ---------------------------------------------------
