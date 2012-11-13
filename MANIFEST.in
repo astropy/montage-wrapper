@@ -1,7 +1,7 @@
 include README.rst
 
 include distribute_setup.py
-recursive-include montage *.pyx *.c
+recursive-include montage_wrapper *.pyx *.c
 
 recursive-include docs *
 recursive-include licenses *
