@@ -122,7 +122,9 @@ If the Montage commands are in one of these directories, then please
 report this as an issue with python-montage.
 """.format(path=error_wrap.fill(os.environ['PATH']).strip())
 
-if not installed:
+ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
+
+if not installed and not ON_RTD:
     print(MONTAGE_MISSING)
     import sys
     sys.exit(1)
