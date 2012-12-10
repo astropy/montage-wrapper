@@ -489,7 +489,7 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
         images_raw_tbl = images_raw_all_tbl
     else:
         log.info("Checking for coverage")
-        m.mCoverageCheck(images_raw_all_tbl, images_raw_tbl, mode='header', header=header_hdr)
+        m.mSubset(images_raw_all_tbl, header_hdr, images_raw_tbl)
 
     # Projecting raw frames
     log.info("Projecting raw frames")
