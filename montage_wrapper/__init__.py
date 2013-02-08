@@ -143,7 +143,8 @@ error_wrap = textwrap.TextWrapper(initial_indent=" " * 11,
                                   subsequent_indent=" " * 11,
                                   width=72)
 
-MONTAGE_MISSING = """ERROR: Montage commands could not be found.
+MONTAGE_MISSING = """
+ERROR: Montage commands could not be found.
 
 In order to use the python-montage module, you will first need to
 install the IPAC Montage software from:
