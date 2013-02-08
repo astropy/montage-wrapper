@@ -355,8 +355,8 @@ def reproject(in_images, out_images, header=None, bitpix=None,
     return
 
 
-def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
-           background_match=False, imglist=None, combine="mean",
+def mosaic(input_dir, output_dir, header=None, image_table=None, mpi=False,
+           n_proc=8, background_match=False, imglist=None, combine="mean",
            exact_size=False, cleanup=True, bitpix=-32, level_only=True,
            work_dir=None):
     """
@@ -374,6 +374,11 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
     header : str, optional
         The header to project to. If this is not specified, then an optimal
         header is chosen.
+
+    image_table : str, optional
+        The table file containing the list of input images. This can be
+        specified to avoid recomputing it every time a mosaic is made from
+        the same set of input files.
 
     mpi : bool, optional
         Whether to use MPI whenever possible (requires the MPI-enabled
@@ -453,8 +458,12 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
     header_hdr = os.path.join(work_dir, 'header.hdr')
 
     # Find path to header file if specified
-    if header:
+    if header is not None:
         header = os.path.abspath(header)
+
+    # Find path to image table if specified
+    if image_table is not None:
+        image_table = os.path.abspath(image_table)
 
     # Find path to image list if specified
     if imglist:
@@ -462,7 +471,7 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
 
     # Create output dir
     if os.path.exists(output_dir):
-        raise Exception("Output directory already exists")
+        raise IOError("Output directory already exists")
     else:
         os.mkdir(output_dir)
 
@@ -479,8 +488,11 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
         os.mkdir(corrected_dir)
 
     # List frames to mosaic
-    log.info("Listing raw frames")
-    m.mImgtbl(raw_dir, images_raw_all_tbl, img_list=imglist, corners=True)
+    if image_table is None:
+        log.info("Listing raw frames")
+        m.mImgtbl(raw_dir, images_raw_all_tbl, img_list=imglist, corners=True)
+    else:
+        sh.copy2(image_table, images_raw_all_tbl)
 
     # Compute header if needed
     if not header:
@@ -489,7 +501,9 @@ def mosaic(input_dir, output_dir, header=None, mpi=False, n_proc=8,
         images_raw_tbl = images_raw_all_tbl
     else:
         log.info("Checking for coverage")
-        m.mSubset(images_raw_all_tbl, header_hdr, images_raw_tbl)
+        s = m.mSubset(images_raw_all_tbl, header_hdr, images_raw_tbl)
+        if s.nmatches == 0:
+            raise MontageError("No images overlap with the requested header")
 
     # Projecting raw frames
     log.info("Projecting raw frames")
