@@ -2,8 +2,9 @@
 # auto-generated from the HTML docs
 
 import subprocess
-import status
 import shlex
+
+from . import status
 
 
 def mCoverageCheck(in_table, out_table, mode, polygon=None, ra=None,

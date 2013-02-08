@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import hashlib
 
 from astropy import log
@@ -21,12 +23,12 @@ def parse_struct(command, string):
             if 'struct' in substring:
                 result.append(Struct(command, substring))
             else:
-                print substring
+                print(substring)
     else:
         if 'struct' in string:
             result = Struct(command, string)
         else:
-            print string
+            print(string)
             result = None
 
     if result:
