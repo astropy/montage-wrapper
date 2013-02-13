@@ -17,9 +17,12 @@ class MontageError(Exception):
 
 def parse_struct(command, string):
 
+    # Convert bytes to string
+    string = string.decode('ascii')
+
     if "\n" in string:
         result = []
-        for substring in string.split('\n'):
+        for substring in string.splitlines():
             if 'struct' in substring:
                 result.append(Struct(command, substring))
             else:
@@ -49,13 +52,11 @@ class Struct(object):
                 p1 = string.index('"')
                 p2 = string.index('"', p1+1)
                 substring = string[p1+1:p2]
-                key = hashlib.md5(substring).hexdigest()
+                key = hashlib.md5(substring.encode('ascii')).hexdigest()
                 strings[key] = substring
                 string = string[:p1] + key + string[p2+1:]
             except:
                 break
-
-        key = hashlib.md5(substring).hexdigest()
 
         for pair in string.split(', '):
             key, value = pair.split('=')
