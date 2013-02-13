@@ -4,6 +4,7 @@ import hashlib
 
 from astropy import log
 
+
 def simplify(value):
     try:
         return int(value)
@@ -50,11 +51,11 @@ class Struct(object):
         while True:
             try:
                 p1 = string.index('"')
-                p2 = string.index('"', p1+1)
-                substring = string[p1+1:p2]
+                p2 = string.index('"', p1 + 1)
+                substring = string[p1 + 1:p2]
                 key = hashlib.md5(substring.encode('ascii')).hexdigest()
                 strings[key] = substring
-                string = string[:p1] + key + string[p2+1:]
+                string = string[:p1] + key + string[p2 + 1:]
             except:
                 break
 
