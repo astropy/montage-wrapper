@@ -158,7 +158,7 @@ but none of them contain the Montage commands:
     PATH = {path}
 
 If the Montage commands are in one of these directories, then please
-report this as an issue with python-montage.
+report this as an issue with montage-wrapper.
 """.format(path=error_wrap.fill(os.environ['PATH']).strip())
 
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
