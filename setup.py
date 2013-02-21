@@ -87,7 +87,7 @@ update_package_files(PACKAGENAME, extensions, package_data, packagenames,
                      package_dirs)
 
 
-setup(name=PACKAGENAME,
+setup(name=PACKAGENAME.replace('_', '-'),
       version=VERSION,
       description=DESCRIPTION,
       packages=packagenames,

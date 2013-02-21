@@ -1,27 +1,63 @@
-**********************
-Python Montage wrapper
-**********************
+********************************************
+Python Montage wrapper (``montage_wrapper``)
+********************************************
 
 Introduction
 ============
 
-This package provides a python wrapper to the Montage Astronomical Image
-Mosaic Engine, including both functions to access individual Montage commands,
-and high-level functions to facilitate mosaicking and re-projecting.
+This Astropy-affiliated package provides a python wrapper to the Montage
+Astronomical Image Mosaic Engine, including both functions to access
+individual Montage commands, and high-level functions to facilitate mosaicking
+and re-projecting.
+
+Download
+========
+
+The latest stable release can be downloaded from `here
+<https://pypi.python.org/pypi/montage-wrapper>`_.
 
 Installation
 ============
 
 This package is a wrapper, not a replacement, for the IPAC Montage mosaicking
-software. Therefore, Montage will need to be installed (see
-`http://montage.ipac.caltech.edu <http://montage.ipac.caltech.edu>`_ for more
-details). Once the IPAC Montage package is installed, you can install the
-montage wrapper with::
+software. Therefore, Montage will need to be downloaded from
+`http://montage.ipac.caltech.edu <http://montage.ipac.caltech.edu>`_. Once you
+have downloaded the latest release on Montage from that website, the
+installation should look like::
 
+    tar xvzf Montage_v3.3.tar.gz
+    cd Montage_v3.3
+    make
+
+then move the ``Montage_v3.3`` directory to wherever you would like to keep
+the installation, and add ``<installation_dir>/Montage_v3.3/bin`` to your
+``$PATH``, where ``<installation_dir>`` is the directory inside which you put
+``Montage_v3.3`` (Montage does not support ``make install``). To check that
+Montage is correctly installed, you can type::
+
+    mAdd
+
+If you see something like::
+
+    [struct stat="ERROR", msg="Usage: mAdd [-p imgdir] [-n(o-areas)] [-a mean|median|count] [-e(xact-size)] [-d level] [-s statusfile] images.tbl template.hdr out.fits"]
+
+then the installation succeeded. Otherwise, if you see::
+
+    mAdd: command not found
+
+then you will need to make sure that the ``Montage_v3.3/bin`` contains
+commands like ``mAdd``, and that the directory is correctly in your ``$PATH``.
+
+
+Once the IPAC Montage package is installed, you can install the
+Python wrapper with::
+
+    tar xvzf montage-wrapper-x.x.x.tar.gz
+    cd montage-wrapper-x.x.x
     python setup.py install
 
-The only dependencies are `Numpy <http://www.numpy.org>`_ and `Astropy
-<http://www.astropy.org>`_.
+(replacing ``x.x.x`` with the actual version number). The only dependencies
+are `Numpy <http://www.numpy.org>`_ and `Astropy <http://www.astropy.org>`_.
 
 Using `montage`
 ===============
@@ -31,16 +67,16 @@ Montage commands
 
 The montage wrapper is imported using::
 
-    import montage_wrapper
+    >>> import montage_wrapper
 
 or, for clarity::
 
-    import montage_wrapper as montage
+    >>> import montage_wrapper as montage
 
 All Montage commands (except ``mJPEG``, ``mMakeImg``, and ``mTileImage``)
 are accessible via Python functions. For example, to access ``mProject``, use::
 
-    montage.mProject(...)
+    >>> montage.mProject(...)
 
 and see :func:`~montage_wrapper.commands.mProject` for available options. Each
 Montage command returns a :class:`~montage_wrapper.status.Struct` object that
@@ -99,7 +135,9 @@ A few Montage commands can be run using MPI for parallelization (see here).
 For MPI-enabled commands (such as `~montage_wrapper.commands.mProjExec`), the use of
 MPI is controlled via the mpi= argument. For example, to call ``mProjExec``
 using MPI, call ``montage.mProjExec(..., mpi=True)`` (rather than
-``montage.mProjExecMPI``, which does not exist).
+``montage.mProjExecMPI``, which does not exist). Note however that this
+requires the MPI versions of the Montage commands to be installed (which is
+not the case by default).
 
 Reference/API
 =============
