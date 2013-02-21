@@ -1,29 +1,34 @@
-CHANGES
+0.9.4 (unreleased)
+------------------
 
-  Version 0.9.4
+- python-montage is now an Astropy affiliated package, and has been
+  renamed to montage_wrapper.
 
-    - python-montage is now an Astropy affiliated package, and has been
-      renamed to montage_wrapper.
+- various bug fixes reported by users, and improved documentation.
 
-  Version 0.9.3
+0.9.3
+-----
 
-    - Fixed bug with user-specified work directory
+- Fixed bug with user-specified work directory
 
-    - Allow user to specify whether to only adjust levels when carrying out
-      the background matching
+- Allow user to specify whether to only adjust levels when carrying out
+  the background matching
 
-  Version 0.9.2
+0.9.2
+-----
 
-    - Migrated to GitHub
+- Migrated to GitHub
 
-    - Improved handing to check whether Montage commands are present
+- Improved handing to check whether Montage commands are present
 
-    - Improved handling of temporary work directory
+- Improved handling of temporary work directory
 
-  Version 0.9.1
+0.9.1
+-----
 
-    Minor bug fixes and improvements
+- Minor bug fixes and improvements
 
-  Version 0.9.0
+0.9.0
+-----
 
-    Initial release
+- Initial release
