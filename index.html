@@ -1,116 +1,50 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-   "http://www.w3.org/TR/html4/loose.dtd">
-
+<!DOCTYPE html>
 <html>
-   <head>
-      <link rel="stylesheet" href="style.css" type="text/css" media="screen" title="no title" charset="utf-8">
-      <link rel="stylesheet" href="style_code.css" type="text/css" media="screen" title="no title" charset="utf-8">
-   </head>
-   <body>
-      <div id="main">
-         
-         <a href="http://github.com/astrofrog/python-montage"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
-         <div class='title'>A Python wrapper for the Montage mosaicking software</div><br>
-         
-         <center>
-         Please note the new URL: <a href="http://astrofrog.github.com/python-montage/">http://astrofrog.github.com/python-montage/</a>
-         </center><br>
-         
-         <div class='subtitle'>Introduction</div><br>
-         
-         Python-montage is a pure python module that provides a python API to
-         the <a href="http://montage.ipac.caltech.edu/">Montage</a> Astronomical
-         Image Mosaic Engine, including both functions to access
-         individual Montage commands, and high-level functions to facilitate
-         mosaicking and reprojecting.
-         <br><br>
-         
-         <center>
-         <a href="https://github.com/downloads/astrofrog/python-montage/python-montage-0.9.3.tar.gz">Download the latest stable version</a><br>(0.9.3, released 10th December 2010)
-         </center>
-         <br>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Montage-wrapper by astropy</title>
+  </head>
 
-         To report bugs and request features, please use the <a href="https://github.com/astrofrog/python-montage/issues">issue tracker</a>. To contact me directly, please use <b>thomas dot robitaille [at] gmail dot com</b>.<br><br>
-         
-         To follow the development and get a copy of the latest development code, visit the <a href="https://github.com/astrofrog/python-montage">GitHub</a> pages.<br><br>
-         
-         <div class='subtitle'>Installation</div><br>
-         
-         To install, simply run <code>python setup.py install</code> inside
-         the <code>python-montage-x.x.x directory</code>.
-         Alternatively, python-montage can be installed using <code>easy_install python-montage</code> if you have <code>setuptools</code> installed.<br><br>
+  <body>
+    <div id="container">
+      <div class="inner">
 
-         The only dependency for python-montage is the <a href="http://montage.ipac.caltech.edu/">Montage</a> software itself. Additionally, if the <a href="http://www.stsci.edu/resources/software_hardware/pyfits">pyfits</a> module is installed, a reproject_hdu function will be available. Finally, MPI is required in order to use the MPI-enabled Montage commands. Note that the Montage MPI-enabled commands are not installed by default.<br><br>
-                  
-         <div class='subtitle'>Documnentation</div><br>
-         
-         The python-montage module is imported using <code>import montage</code>.
-         All Montage commands (except <code>mCoverageCheck</code>,
-         <code>mJPEG</code>, <code>mMakeImg</code>, and
-         <code>mTileImage</code>) are implemented. For example, to access
-         <code>mProject</code>, use <code>montage.mProject</code>, and for usage
-         instructions, use <code>help(montage.mProject)</code>.
-         
-         In addition, the following high-level functions are available:
-         
-         <ul>
-            <li><code>montage.reproject</code>: reproject a FITS file
-            <li><code>montage.reproject_hdu</code>: reproject a pyfits HDU image object
-            <li><code>montage.mosaic</code>: mosaic all FITS files in a directory
-         </ul>
-         
-         For details on how to use these, use the <code>help</code> command.<br><br>
-         
-         A few Montage commands can be run using MPI for parallelization (see
-         <a
-         href="http://montage.ipac.caltech.edu/docs/gridtools.html">here</a>).
-         For MPI-enabled commands (such as <code>mProjExec</code>), the use of
-         MPI is controlled via the <code>mpi=</code> argument. For example, to
-         call <code>mProjExec</code> using MPI, call
-         <code>montage.mProjExec(..., mpi=True)</code> (rather than
-         <code>montage.mProjExecMPI</code>).<br><br>
-         
-         <div class='subtitle'>Example</div><br>
-         
-         The following example illustrates how python-montage can be used to call basic Montage commands as well as how to retrieve and access the status object.<br>
-         
-         <div class='code'>
-            <div class="highlight"><pre>
-               
-<span class="go">Python 2.6.1 (r261:67515, Jul  7 2009, 23:51:51) </span>
-<span class="go">[GCC 4.2.1 (Apple Inc. build 5646)] on darwin</span>
-<span class="go">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">montage</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">montage</span><span class="o">.</span><span class="n">mArchiveList</span><span class="p">(</span><span class="s">&#39;2MASS&#39;</span><span class="p">,</span> <span class="s">&#39;K&#39;</span><span class="p">,</span> <span class="s">&#39;m31&#39;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s">&#39;m31_list.tbl&#39;</span><span class="p">)</span>
-<span class="go">count : 18</span>
-<span class="go">stat : OK</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">montage</span><span class="o">.</span><span class="n">mMakeHdr</span><span class="p">(</span><span class="s">&#39;m31_list.tbl&#39;</span><span class="p">,</span> <span class="s">&#39;header.hdr&#39;</span><span class="p">,</span> <span class="n">north_aligned</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="go">count : 18</span>
-<span class="go">lat4 : 41.744136</span>
-<span class="go">stat : OK</span>
-<span class="go">lat1 : 40.912238</span>
-<span class="go">lat3 : 41.744136</span>
-<span class="go">latsize : 0.831951</span>
-<span class="go">clon : 10.717965</span>
-<span class="go">lonsize : 0.830562</span>
-<span class="go">posang : 0.0</span>
-<span class="go">lon4 : 11.274528</span>
-<span class="go">lat2 : 40.912238</span>
-<span class="go">lon1 : 11.267467</span>
-<span class="go">clat : 41.32951</span>
-<span class="go">lon2 : 10.168464</span>
-<span class="go">lon3 : 10.161403</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">montage</span><span class="o">.</span><span class="n">mMakeHdr</span><span class="p">(</span><span class="s">&#39;m31_list.tbl&#39;</span><span class="p">,</span> <span class="s">&#39;header.hdr&#39;</span><span class="p">,</span> <span class="n">north_aligned</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">stat</span>
-<span class="go">&#39;OK&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">lon1</span>
-<span class="go">11.267467</span>
+        <header>
+          <h1>Montage-wrapper</h1>
+          <h2>A Python wrapper for the Montage mosaicking software</h2>
+        </header>
 
-            </pre></div>
-         </div>
-         
-         
-         
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/astropy/montage-wrapper/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/astropy/montage-wrapper/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/astropy/montage-wrapper" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <p>Montage-wrapper (formerly python-montage) is a pure python module that provides a python API to the <a href="http://montage.ipac.caltech.edu/">Montage</a> Astronomical Image Mosaic Engine, including both functions to access individual Montage commands, and high-level functions to facilitate mosaicking and reprojecting.</p>
+
+<p>To report bugs and request features, please use the <a href="https://github.com/astropy/montage-wrapper/issues">issue tracker</a>. To contact me directly, please use <b>thomas dot robitaille [at] gmail dot com</b>.<br><br></p>
+
+<p>To follow the development and get a copy of the latest development code, visit the <a href="https://github.com/astropy/montage-wrapper">GitHub</a> pages.<br><br></p>
+        </section>
+
+        <footer>
+          Montage-wrapper is maintained by <a href="https://github.com/astropy">astropy</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
       </div>
-   </body>
+    </div>
+  </body>
 </html>
