@@ -1,68 +1,63 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <title>montage-wrapper by astropy</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <title>montage-wrapper by astropy</title>
   </head>
-
   <body>
-    <div id="container">
-      <div class="inner">
+    <div class="wrapper">
+      <header>
+        <h1>montage-wrapper</h1>
+        <p>A Python wrapper for the IPAC Montage mosaicking software</p>
 
-        <header>
-          <h1>montage-wrapper</h1>
-          <h2>A Python wrapper for the IPAC Montage mosaicking software</h2>
-        </header>
+        <p class="view"><a href="https://github.com/astropy/montage-wrapper">View the Project on GitHub <small>astropy/montage-wrapper</small></a></p>
 
-        <section id="downloads" class="clearfix">
-          <a href="https://github.com/astropy/montage-wrapper/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
-          <a href="https://github.com/astropy/montage-wrapper/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
-          <a href="https://github.com/astropy/montage-wrapper" id="view-on-github" class="button"><span>View on GitHub</span></a>
-        </section>
 
-        <hr>
+        <ul>
+          <li><a href="https://github.com/astropy/montage-wrapper/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/astropy/montage-wrapper/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/astropy/montage-wrapper">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p>The <strong>montage-wrapper</strong> module (formerly python-montage) is an <a href="http://www.astropy.org">Astropy</a> affiliated package that provides a way to run the <a href="http://montage.ipac.caltech.edu/">Montage Astronomical Image Mosaic Engine</a> from Python, including both functions to access individual Montage commands, and high-level functions to facilitate mosaicking and reprojecting. Once the IPAC Montage software is installed, installing the Python wrapper is straightforward:</p>
 
-        <section id="main_content">
-          <p>The <strong>montage-wrapper</strong> module (formerly python-montage) is an <a href="http://www.astropy.org">Astropy</a> affiliated package that provides a way to run the <a href="http://montage.ipac.caltech.edu/">Montage Astronomical Image Mosaic Engine</a> from Python, including both functions to access individual Montage commands, and high-level functions to facilitate mosaicking and reprojecting. Once the IPAC Montage software is installed, installing the Python wrapper is straightforward:</p>
-
-<pre><code>pip install montage-wrapper
-</code></pre>
+<div class="highlight"><pre>pip install montage-wrapper
+</pre></div>
 
 <p>Once installed, using the Montage wrapper is simple - any Montage command has a Python function equivalent:</p>
 
-<pre><code>&gt;&gt;&gt; import montage_wrapper as montage
-&gt;&gt;&gt; montage.mArchiveList('2MASS', 'K', 'm31', 0.5, 0.5, 'm31_list.tbl')
-count : 18
-stat : OK
-</code></pre>
+<div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">montage_wrapper</span> <span class="kn">as</span> <span class="nn">montage</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">montage</span><span class="o">.</span><span class="n">mArchiveList</span><span class="p">(</span><span class="s">'2MASS'</span><span class="p">,</span> <span class="s">'K'</span><span class="p">,</span> <span class="s">'m31'</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s">'m31.tbl'</span><span class="p">)</span>
+<span class="n">count</span> <span class="p">:</span> <span class="mi">18</span>
+<span class="n">stat</span> <span class="p">:</span> <span class="n">OK</span>
+</pre></div>
 
 <p>and there are also convenience functions provided, for example a function to run the mosaicking process from start to end:</p>
 
-<pre><code>&gt;&gt;&gt; montage.mosaic('raw_tiles', 'final_mosaic')
-</code></pre>
+<div class="highlight"><pre><span class="o">&gt;&gt;&gt;</span> <span class="n">montage</span><span class="o">.</span><span class="n">mosaic</span><span class="p">(</span><span class="s">'raw_tiles'</span><span class="p">,</span> <span class="s">'final_mosaic'</span><span class="p">)</span>
+</pre></div>
 
 <p>The <a href="http://montage-wrapper.readthedocs.org">documentation</a> contains more details on installing and using the module.</p>
 
 <p>To report bugs and request features, please use the <a href="https://github.com/astropy/montage-wrapper/issues">issue tracker</a>. To contact me directly, please use <b>thomas dot robitaille [at] gmail dot com</b>.</p>
 
 <p>To follow the development and get a copy of the latest development code, visit the <a href="https://github.com/astropy/montage-wrapper">GitHub</a> pages.</p>
-        </section>
-
-        <footer>
-          montage-wrapper is maintained by <a href="https://github.com/astropy">astropy</a><br>
-          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
-        </footer>
-
-        
-      </div>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/astropy">astropy</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
     </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
   </body>
 </html>
