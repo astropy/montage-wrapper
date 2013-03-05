@@ -1,4 +1,6 @@
+include CHANGES.rst
 include README.rst
+include LICENSE.rst
 
 include distribute_setup.py
 recursive-include montage_wrapper *.pyx *.c
@@ -11,6 +13,3 @@ recursive-include scripts *
 exclude *.pyc *.o 
 prune docs/_build
 prune build
-
-include INSTALL CHANGES README LICENSE
-
