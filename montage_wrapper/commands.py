@@ -1128,7 +1128,7 @@ def mGetHdr(in_image, img_header, debug=False, hdu=None, status_file=None):
     debug : bool, optional
         Turns on debugging.
 
-    hdu : float, optional
+    hdu : int, optional
         Retrieve the header from the Fits extention given by hdu. "0"
         indicates the primary FITS extension, and is the default used by
         mGetHdr.
@@ -1595,7 +1595,7 @@ def mProject(in_image, out_image, template_header, factor=None,
         Output and errors are written to status_file instead of being written
         to stdout.
 
-    hdu : float, optional
+    hdu : int, optional
         Use the specified FITS extension (default is to use the first HDU with
         image data)
 
@@ -1686,7 +1686,7 @@ def mProjectPP(in_image, out_image, template_header, factor=None,
         Specifies an alternate FITS header for use in mProjectPP calculations,
         allows substitution of psuedo-TAN headers created by mTANHdr.
 
-    hdu : float, optional
+    hdu : int, optional
         Specify the FITS extension to re-project if the FITS image is multi-
         extension.
 
@@ -1860,7 +1860,7 @@ def mPutHdr(in_image, out_image, template_header, debug=False,
     status_file : str, optional
         Output and errors are sent to status_file instead of to stdout
 
-    hdu : float, optional
+    hdu : int, optional
         Write to the specified FITS extnension (HDU).
     '''
     command = "mPutHdr"
@@ -2016,7 +2016,7 @@ def mSubimage(in_image, out_image, ra, dec, xsize, debug=False,
         All pixels - Force retrieval of whole image (useful to extract an
         entire HDU)
 
-    hdu : float, optional
+    hdu : int, optional
         Operate on the specified FITS header extension (HDU)
 
     status_file : str, optional
@@ -2075,7 +2075,7 @@ def mSubimage_pix(in_image, out_image, xstartpix, ystartpix, xpixsize,
     debug : bool, optional
         Turns on debugging.
 
-    hdu : float, optional
+    hdu : int, optional
         Operate on the specified FITS header extension (HDU)
 
     status_file : str, optional
