@@ -521,14 +521,14 @@ def mosaic(input_dir, output_dir, header=None, image_table=None, mpi=False,
         m.mOverlaps(images_projected_tbl, diffs_tbl)
         m.mDiffExec(diffs_tbl, header_hdr, diffs_dir, proj_dir=projected_dir,
                     mpi=mpi, n_proc=n_proc)
-        m.mFitExec(diffs_tbl, fits_tbl, diffs_dir)
+        m.mFitExec(diffs_tbl, fits_tbl, diffs_dir, mpi=mpi, n_proc=n_proc)
         m.mBgModel(images_projected_tbl, fits_tbl, corrections_tbl,
                    n_iter=32767, level_only=level_only)
 
         # Matching background
         log.info("Matching background")
         m.mBgExec(images_projected_tbl, corrections_tbl, corrected_dir,
-                  proj_dir=projected_dir)
+                  proj_dir=projected_dir, mpi=mpi, n_proc=n_proc)
         sh.copy(corrections_tbl, output_dir)
 
         # Mosaicking frames
