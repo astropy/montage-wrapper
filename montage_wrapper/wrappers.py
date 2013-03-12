@@ -358,7 +358,7 @@ def reproject(in_images, out_images, header=None, bitpix=None,
 def mosaic(input_dir, output_dir, header=None, image_table=None, mpi=False,
            n_proc=8, background_match=False, imglist=None, combine="mean",
            exact_size=False, cleanup=True, bitpix=-32, level_only=True,
-           work_dir=None):
+           work_dir=None, background_n_iter=None):
     """
     Combine FITS files into a mosaic
 
@@ -419,6 +419,10 @@ def mosaic(input_dir, output_dir, header=None, image_table=None, mpi=False,
         The temporary directory to use for the mosaicking. By default, this
         is a temporary directory in a system-defined location, but it can be
         useful to specify this manually for debugging purposes.
+
+    background_n_iter : int, optional
+        Number of iterations for the background matching (defaults to 5000). Can be
+        between 1 and 32767.
     """
 
     if not combine in ['mean', 'median', 'count']:
@@ -523,7 +527,7 @@ def mosaic(input_dir, output_dir, header=None, image_table=None, mpi=False,
                     mpi=mpi, n_proc=n_proc)
         m.mFitExec(diffs_tbl, fits_tbl, diffs_dir, mpi=mpi, n_proc=n_proc)
         m.mBgModel(images_projected_tbl, fits_tbl, corrections_tbl,
-                   n_iter=32767, level_only=level_only)
+                   n_iter=background_n_iter, level_only=level_only)
 
         # Matching background
         log.info("Matching background")
