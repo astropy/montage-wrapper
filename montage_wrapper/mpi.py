@@ -23,6 +23,7 @@ def set_mpi_command(command):
     
     >>> set_mpi_command('mpiexec -f mpd.hosts -np {n_proc} {executable}')
     """
+    global MPI_COMMAND
     MPI_COMMAND = command
     
 def _get_mpi_command(executable=None, n_proc=None):
