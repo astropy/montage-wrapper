@@ -26,4 +26,4 @@ def set_mpi_command(command):
     MPI_COMMAND = command
     
 def _get_mpi_command(executable=None, n_proc=None):
-    return COMMAND.format(executable=executable, n_proc=n_proc)
+    return MPI_COMMAND.format(executable=executable, n_proc=n_proc)
