@@ -358,7 +358,7 @@ def reproject(in_images, out_images, header=None, bitpix=None,
 def mosaic(input_dir, output_dir, header=None, image_table=None, mpi=False,
            n_proc=8, background_match=False, imglist=None, combine="mean",
            exact_size=False, cleanup=True, bitpix=-32, level_only=True,
-           work_dir=None, background_n_iter=None):
+           work_dir=None, background_n_iter=None, subset_fast=False):
     """
     Combine FITS files into a mosaic
 
@@ -423,6 +423,9 @@ def mosaic(input_dir, output_dir, header=None, image_table=None, mpi=False,
     background_n_iter : int, optional
         Number of iterations for the background matching (defaults to 5000). Can be
         between 1 and 32767.
+
+    subset_fast : bool, optional
+        Whether to use the fast mode for mSubset
     """
 
     if not combine in ['mean', 'median', 'count']:
@@ -505,7 +508,7 @@ def mosaic(input_dir, output_dir, header=None, image_table=None, mpi=False,
         images_raw_tbl = images_raw_all_tbl
     else:
         log.info("Checking for coverage")
-        s = m.mSubset(images_raw_all_tbl, header_hdr, images_raw_tbl)
+        s = m.mSubset(images_raw_all_tbl, header_hdr, images_raw_tbl, fast_mode=subset_fast)
         if s.nmatches == 0:
             raise MontageError("No images overlap with the requested header")
 
