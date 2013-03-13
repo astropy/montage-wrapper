@@ -521,11 +521,17 @@ def mosaic(input_dir, output_dir, header=None, image_table=None, mpi=False,
     m.mImgtbl(projected_dir, images_projected_tbl)
 
     if background_match:
+        log.info("Determining overlaps")
+        s = m.mOverlaps(images_projected_tbl, diffs_tbl)
+        if s.count < 1:
+            log.info("No overlapping frames, backgrounds will not be adjusted")
+            background_match = False
+
+    if background_match:
 
         # Modeling background
 
         log.info("Modeling background")
-        m.mOverlaps(images_projected_tbl, diffs_tbl)
         m.mDiffExec(diffs_tbl, header_hdr, diffs_dir, proj_dir=projected_dir,
                     mpi=mpi, n_proc=n_proc)
         m.mFitExec(diffs_tbl, fits_tbl, diffs_dir, mpi=mpi, n_proc=n_proc)
