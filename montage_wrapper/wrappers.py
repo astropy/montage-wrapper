@@ -518,12 +518,14 @@ def mosaic(input_dir, output_dir, header=None, image_table=None, mpi=False,
                 raw_dir=raw_dir, mpi=mpi, n_proc=n_proc, exact=exact_size)
 
     # List projected frames
-    m.mImgtbl(projected_dir, images_projected_tbl)
+    s = m.mImgtbl(projected_dir, images_projected_tbl)
+    if s.count == 0:
+        raise MontageError("No images were successfully projected")
 
     if background_match:
         log.info("Determining overlaps")
         s = m.mOverlaps(images_projected_tbl, diffs_tbl)
-        if s.count < 1:
+        if s.count == 0:
             log.info("No overlapping frames, backgrounds will not be adjusted")
             background_match = False
 
