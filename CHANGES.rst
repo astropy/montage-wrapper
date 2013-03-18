@@ -1,4 +1,4 @@
-0.9.5 (unreleased)
+0.9.5 (2013-03-18)
 ------------------
 
 - removed unused files
