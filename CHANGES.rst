@@ -4,6 +4,12 @@
 - python-montage is now an Astropy affiliated package, and has been
   renamed to montage_wrapper.
 
+- improved performance of mosaic() by ignoring frames that don't overlap with
+  the requested header. Also improved exceptions in mosaic().
+
+- new function ``reproject_cube`` to reproject a FITS cube slice by slice
+  (thanks to Adam Ginsburg).
+
 - various bug fixes reported by users, and improved documentation.
 
 0.9.3
