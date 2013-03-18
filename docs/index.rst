@@ -139,6 +139,21 @@ using MPI, call ``montage.mProjExec(..., mpi=True)`` (rather than
 requires the MPI versions of the Montage commands to be installed (which is
 not the case by default).
 
+Different MPI installations require different commands (e.g. ``mpirun`` vs
+``mpiexec``) as well as different options, so it is possible to customize the
+MPI command::
+
+    >>> import montage_wrapper as montage
+    >>> montage.set_mpi_command('mpiexec -n {n_proc} {executable}')
+
+The command string should include ``{n_proc}``, which will be replaced by the
+number of proceses, and ``{executable}``, which will be replaced by the
+appropriate Montage executable. The current MPI command can be accessed with::
+
+    >>> from montage_wrapper.mpi import MPI_COMMAND
+    >>> MPI_COMMAND
+    'mpiexec -n {n_proc} {executable}'
+
 Reference/API
 =============
 
