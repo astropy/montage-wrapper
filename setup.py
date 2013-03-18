@@ -40,7 +40,7 @@ LONG_DESCRIPTION = ''
 AUTHOR = 'Thomas Robitaille'
 AUTHOR_EMAIL = 'thomas.robitaille@gmail.com'
 LICENSE = 'BSD'
-URL = ''
+URL = 'http://www.astropy.org/montage-wrapper/'
 
 # VERSION should be PEP386 compatible (http://www.python.org/dev/peps/pep-0386)
 VERSION = '0.9.6.dev'
