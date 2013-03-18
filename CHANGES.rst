@@ -1,4 +1,4 @@
-0.9.4 (unreleased)
+0.9.4 (2013-03-18)
 ------------------
 
 - python-montage is now an Astropy affiliated package, and has been
