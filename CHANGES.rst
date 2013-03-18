@@ -1,8 +1,9 @@
 0.9.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- removed unused files
 
+- added documentation about setting custom MPI command
 
 0.9.4 (2013-03-18)
 ------------------
