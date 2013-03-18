@@ -24,6 +24,10 @@ def set_mpi_command(command):
     >>> set_mpi_command('mpiexec -f mpd.hosts -np {n_proc} {executable}')
     """
     global MPI_COMMAND
+    if "{n_proc}" not in command:
+        raise ValueError("MPI command does not include {n_proc}")
+    if "{executable}" not in command:
+        raise ValueError("MPI command does not include {executable}")
     MPI_COMMAND = command
     
 def _get_mpi_command(executable=None, n_proc=None):

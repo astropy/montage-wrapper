@@ -129,6 +129,7 @@ if not _PACKAGE_SETUP_:
 
 from .commands import *
 from .wrappers import *
+from .mpi import set_mpi_command
 
 # Check whether Montage is installed
 installed = False
