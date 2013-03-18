@@ -86,6 +86,14 @@ package_dirs = {}
 update_package_files(PACKAGENAME, extensions, package_data, packagenames,
                      package_dirs)
 
+# Define entry points for zest.releaser
+entry_points = {}
+for hook in [('prereleaser', 'middle'), ('releaser', 'middle'),
+             ('postreleaser', 'before'), ('postreleaser', 'middle')]:
+    hook_ep = 'zest.releaser.' + '.'.join(hook)
+    hook_name = 'montage_wrapper.release.' + '.'.join(hook)
+    hook_func = 'astropy.utils.release:' + '_'.join(hook)
+    entry_points[hook_ep] = ['%s = %s' % (hook_name, hook_func)]
 
 setup(name=PACKAGENAME.replace('_', '-'),
       version=VERSION,
@@ -105,6 +113,7 @@ setup(name=PACKAGENAME.replace('_', '-'),
       long_description=LONG_DESCRIPTION,
       cmdclass=cmdclassd,
       zip_safe=False,
-      use_2to3=True
+      use_2to3=True,
+      entry_points=entry_points
       )
 
