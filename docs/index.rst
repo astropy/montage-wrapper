@@ -59,13 +59,13 @@ Python wrapper with::
 (replacing ``x.x.x`` with the actual version number). The only dependencies
 are `Numpy <http://www.numpy.org>`_ and `Astropy <http://www.astropy.org>`_.
 
-Using `montage`
-===============
+Using `montage_wrapper`
+=======================
 
 Montage commands
 ----------------
 
-The montage wrapper is imported using::
+The Montage wrapper is imported using::
 
     >>> import montage_wrapper
 
