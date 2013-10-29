@@ -2,6 +2,8 @@
 Python Montage wrapper (``montage_wrapper``)
 ********************************************
 
+.. _numpy: http://www.numoy.org
+
 Introduction
 ============
 
@@ -57,7 +59,7 @@ Python wrapper with::
     python setup.py install
 
 (replacing ``x.x.x`` with the actual version number). The only dependencies
-are `Numpy <http://www.numpy.org>`_ and `Astropy <http://www.astropy.org>`_.
+are numpy_ and astropy_.
 
 Using `montage_wrapper`
 =======================
