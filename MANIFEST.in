@@ -13,3 +13,7 @@ recursive-include scripts *
 exclude *.pyc *.o 
 prune docs/_build
 prune build
+
+include setuptools_bootstrap.py
+include ez_setup.py
+include setup.cfg
