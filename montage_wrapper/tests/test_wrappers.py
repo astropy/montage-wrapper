@@ -1,5 +1,4 @@
 import os
-import random
 import tempfile
 from hashlib import md5
 
@@ -14,7 +13,6 @@ class TestMosaic(object):
 
     def setup_class(self):
 
-        random.seed('hello')
         np.random.seed(12345)
 
         w = WCS(naxis=2)
@@ -32,7 +30,7 @@ class TestMosaic(object):
                 w.wcs.cdelt = np.array([-0.0066667, 0.0066667])
                 w.wcs.crval = [lon[i], lat[j]]
                 w.wcs.ctype = [b"RA---TAN", b"DEC--TAN"]
-                w.wcs.crota = [0, random.uniform(0., 360.)]
+                w.wcs.crota = [0, np.random.uniform(0., 360.)]
 
                 header = w.to_header()
 
@@ -43,4 +41,4 @@ class TestMosaic(object):
     def test_mosaic(self):
         mosaic(os.path.join(self.tmpdir, 'raw'),os.path.join(self.tmpdir, 'mosaic'))
         hdu = fits.open(os.path.join(self.tmpdir, 'mosaic', 'mosaic.fits'))[0]
-        assert md5(hdu.data).hexdigest() == "1ef33fc1bf3062739f65f7cadb47eea9"
+        assert md5(hdu.data).hexdigest() == "3377373e039b3f934262151e82beaaf1"
