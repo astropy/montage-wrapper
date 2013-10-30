@@ -31,7 +31,7 @@ class TestMosaic(object):
                 w.wcs.crpix = [50.5, 50.5]
                 w.wcs.cdelt = np.array([-0.0066667, 0.0066667])
                 w.wcs.crval = [lon[i], lat[j]]
-                w.wcs.ctype = ["RA---TAN", "DEC--TAN"]
+                w.wcs.ctype = [b"RA---TAN", b"DEC--TAN"]
                 w.wcs.crota = [0, random.uniform(0., 360.)]
 
                 header = w.to_header()
