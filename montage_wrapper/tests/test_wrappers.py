@@ -7,6 +7,7 @@ import numpy as np
 from numpy.testing import assert_allclose
 from astropy.wcs import WCS
 from astropy.io import fits
+from astropy.tests.helper import pytest
 
 from .. import mosaic
 
@@ -53,6 +54,7 @@ class TestMosaic(object):
         assert_allclose(np.mean(valid), 0.4995945318627074)
         assert_allclose(np.median(valid), 0.5003376603126526)
 
+    @pytest.mark.xfail()  # results are not consistent on different machines
     def test_mosaic_background_match(self):
         mosaic(os.path.join(self.tmpdir, 'raw'),os.path.join(self.tmpdir, 'mosaic_bkgmatch'), background_match=True)
         hdu = fits.open(os.path.join(self.tmpdir, 'mosaic_bkgmatch', 'mosaic.fits'))[0]
@@ -62,4 +64,3 @@ class TestMosaic(object):
         assert_allclose(np.std(valid), 0.12661606622654725)
         assert_allclose(np.mean(valid), 0.4994805202294361)
         assert_allclose(np.median(valid), 0.5002447366714478)
-
