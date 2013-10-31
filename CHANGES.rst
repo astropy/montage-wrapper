@@ -1,4 +1,4 @@
-0.9.6 (unreleased)
+0.9.6 (2013-10-31)
 ------------------
 
 - Added missing files required for installation

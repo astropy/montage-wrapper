@@ -30,7 +30,7 @@ LICENSE = 'BSD'
 URL = 'http://www.astropy.org/montage-wrapper/'
 
 # VERSION should be PEP386 compatible (http://www.python.org/dev/peps/pep-0386)
-VERSION = '0.9.6.dev'
+VERSION = '0.9.6'
 
 # Indicates if this version is a release version
 RELEASE = 'dev' not in VERSION
