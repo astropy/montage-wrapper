@@ -1,8 +1,9 @@
 0.9.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Added missing files required for installation
 
+- Added a unit test for `mosaic`
 
 0.9.5 (2013-03-18)
 ------------------
