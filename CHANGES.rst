@@ -1,4 +1,4 @@
-0.9.7 (unreleased)
+0.9.7 (2013-11-02)
 ------------------
 
 - Disabled configuration file since it is not used. This gets rid of the
