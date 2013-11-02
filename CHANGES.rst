@@ -1,8 +1,11 @@
 0.9.7 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Disabled configuration file since it is not used. This gets rid of the
+  warning at import time.
 
+- No longer check if Montage is in the PATH on install, but instead just on
+  import.
 
 0.9.6 (2013-10-31)
 ------------------
