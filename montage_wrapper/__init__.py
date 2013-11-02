@@ -150,7 +150,7 @@ report this as an issue with montage-wrapper.
 
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
-if not installed and not ON_RTD:
+if not _ASTROPY_SETUP_ and not ON_RTD and not installed:
     print(MONTAGE_MISSING)
     import sys
     sys.exit(1)
