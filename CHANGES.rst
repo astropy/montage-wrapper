@@ -1,7 +1,7 @@
 0.9.8 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Added wrapper for mTileImage command
 
 
 0.9.7 (2013-11-02)
