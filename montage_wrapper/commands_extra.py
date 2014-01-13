@@ -129,9 +129,10 @@ def mCoverageCheck(in_table, out_table, mode, polygon=None, ra=None,
     if stderr:
         raise Exception(stderr)
     return status.parse_struct("mCoverageCheck", p.stdout.read().strip())
+    
+    
 def mTileImage(in_image, tiles_x, tiles_y, overlap_x=None, overlap_y=None):
     '''
-    
     mTileImage splits up an image into a given number of tiles.
     An overlap between each tile can optionally be specified. 
 
@@ -164,3 +165,4 @@ def mTileImage(in_image, tiles_x, tiles_y, overlap_x=None, overlap_y=None):
     if stderr:
         raise Exception(stderr)
     return status.parse_struct("mTileImage", p.stdout.read().strip())
+    
