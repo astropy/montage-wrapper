@@ -129,3 +129,39 @@ def mCoverageCheck(in_table, out_table, mode, polygon=None, ra=None,
     if stderr:
         raise Exception(stderr)
     return status.parse_struct("mCoverageCheck", p.stdout.read().strip())
+    
+    
+def mTileImage(in_image, tiles_x, tiles_y, overlap_x=None, overlap_y=None):
+    '''
+    mTileImage splits up an image into a given number of tiles.
+    An overlap between each tile can optionally be specified. 
+
+    Parameters
+    ----------
+
+    in_image : str
+        Input FITS file
+        
+    tiles_x : int
+        Number of tiles along x axes.
+
+    tiles_y : int
+        Number of tiles along y axes.
+        
+    overlap_x : int, optional
+        Pixel overlap in x direction.
+        
+    overlap_y : int, optional
+        Pixel overlap in y direction.
+    '''
+    command = "mTileImage"
+    if overlap_x or overlap_y:
+        command += " -o %s,%s" % (overlap_x, overlap_y)
+    command += " -n %s,%s" % (tiles_x, tiles_y)
+    command += " " + str(in_image)
+    p = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
+    stderr = p.stderr.read()
+    if stderr:
+        raise Exception(stderr)
+    return status.parse_struct("mTileImage", p.stdout.read().strip())
