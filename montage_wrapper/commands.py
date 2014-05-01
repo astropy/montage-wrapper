@@ -1022,7 +1022,7 @@ def mFitplane(in_image, border=None, debug_level=None, status_file=None):
     return status.parse_struct("mFitplane", p.stdout.read().strip())
 
 
-def mFixNan(in_image, out_image, debug_level=None, nan_value=None,
+def mFixNaN(in_image, out_image, debug_level=None, nan_value=None,
           min_blank=None, max_blank=None):
     '''
     Converts NaNs found in the image to some other value (given by the user),
@@ -1048,7 +1048,7 @@ def mFixNan(in_image, out_image, debug_level=None, nan_value=None,
         If the nan_value option is not used, mFixNaN will replace all pixel
         values between min_blank and max_blank with NaN.
     '''
-    command = "mFixNan"
+    command = "mFixNaN"
     if debug_level:
         command += " -d %s" % str(debug_level)
     if nan_value:
@@ -1063,7 +1063,7 @@ def mFixNan(in_image, out_image, debug_level=None, nan_value=None,
     stderr = p.stderr.read()
     if stderr:
         raise Exception(stderr)
-    return status.parse_struct("mFixNan", p.stdout.read().strip())
+    return status.parse_struct("mFixNaN", p.stdout.read().strip())
 
 
 def mFlattenExec(images_table, flat_dir, img_dir=None, debug=False,
