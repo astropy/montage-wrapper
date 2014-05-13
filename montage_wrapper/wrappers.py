@@ -39,19 +39,25 @@ def reproject_hdu(in_hdu, **kwargs):
     Additional keyword arguments are passed to :func:`~montage_wrapper.wrappers.reproject`
     '''
 
+    cleanup = kwargs.get('cleanup', True)
+    silent_cleanup = kwargs.get('silent_cleanup', True)
+
     # Make work directory
     work_dir = tempfile.mkdtemp()
 
-    in_image = os.path.join(work_dir, 'in.fits')
-    out_image = os.path.join(work_dir, 'out.fits')
+    try:
+        in_image = os.path.join(work_dir, 'in.fits')
+        out_image = os.path.join(work_dir, 'out.fits')
 
-    fits.writeto(in_image, in_hdu.data, in_hdu.header)
+        fits.writeto(in_image, in_hdu.data, in_hdu.header)
 
-    reproject(in_image, out_image, **kwargs)
+        reproject(in_image, out_image, **kwargs)
 
-    out_hdu = fits.open(out_image)[0]
+        out_hdu = fits.open(out_image)[0]
 
-    return out_hdu
+        return out_hdu
+    finally:
+        _finalize(cleanup, work_dir, silent_cleanup)
 
 
 def reproject_cube(in_image, out_image, header=None, bitpix=None,
