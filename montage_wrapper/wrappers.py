@@ -1,3 +1,4 @@
+import atexit
 import os
 import glob
 import shutil as sh
@@ -453,6 +454,14 @@ def mosaic(input_dir, output_dir, header=None, image_table=None, mpi=False,
         os.mkdir(work_dir)
     else:
         work_dir = tempfile.mkdtemp()
+
+    # Make sure the working directory is cleaned up even when something goes
+    # wrong (or Ctrl-C is pressed, raising the KeyboardInterrupt exception)
+    @atexit.register
+    def cleanup_workdir():
+        """ Run _finalize() if necessary """
+        if os.path.exists(work_dir):
+            _finalize(cleanup, work_dir)
 
     images_raw_all_tbl = os.path.join(work_dir, 'images_raw_all.tbl')
     images_raw_tbl = os.path.join(work_dir, 'images_raw.tbl')
