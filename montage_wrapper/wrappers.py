@@ -409,7 +409,7 @@ def mosaic(input_dir, output_dir, header=None, image_table=None, mpi=False,
         Whether the output mosaic should match the input header exactly, or
         whether the mosaic should be trimmed if possible.
 
-    clenup : bool, optional
+    cleanup : bool, optional
         Whether to remove any temporary directories used for mosaicking
 
     bitpix : int, optional
