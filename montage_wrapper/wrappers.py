@@ -542,16 +542,14 @@ def mosaic(input_dir, output_dir, header=None, image_table=None, mpi=False,
     # Projecting raw frames
     log.info("Projecting raw frames")
 
-    if hdu is None:
-        m.mProjExec(images_raw_tbl, header_hdr, projected_dir, stats_tbl,
-                    raw_dir=raw_dir, mpi=mpi, n_proc=n_proc, exact=exact_size)
-    else:
+    if hdu is not None:
         from astropy.table import Table
         table = Table.read(images_raw_tbl, format='ascii.ipac')
         table_filtered = table[table['hdu'] == hdu]
         table_filtered.write(images_raw_tbl, format='ascii.ipac')
-        m.mProjExec(images_raw_tbl, header_hdr, projected_dir, stats_tbl,
-                    raw_dir=raw_dir, mpi=mpi, n_proc=n_proc, exact=exact_size)
+
+    m.mProjExec(images_raw_tbl, header_hdr, projected_dir, stats_tbl,
+                raw_dir=raw_dir, mpi=mpi, n_proc=n_proc, exact=exact_size)
 
     # List projected frames
     s = m.mImgtbl(projected_dir, images_projected_tbl)
