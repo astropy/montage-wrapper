@@ -45,7 +45,7 @@ class TestMosaic(object):
         shutil.rmtree(self.tmpdir)
 
     def test_mosaic(self):
-        mosaic(os.path.join(self.tmpdir, 'raw'),os.path.join(self.tmpdir, 'mosaic'))
+        mosaic(os.path.join(self.tmpdir, 'raw'),os.path.join(self.tmpdir, 'mosaic'), hdu=0)
         hdu = fits.open(os.path.join(self.tmpdir, 'mosaic', 'mosaic.fits'))[0]
         assert hdu.data.shape == (288, 282)
         valid = hdu.data[~np.isnan(hdu.data)]

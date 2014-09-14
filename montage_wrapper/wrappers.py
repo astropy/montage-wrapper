@@ -547,9 +547,9 @@ def mosaic(input_dir, output_dir, header=None, image_table=None, mpi=False,
                     raw_dir=raw_dir, mpi=mpi, n_proc=n_proc, exact=exact_size)
     else:
         from astropy.table import Table
-        table = Table.read(images_raw_tbl,type='ascii.ipac')
-        table_filtered = table[table['hdu']==hdu]
-        table_filtered.write(images_raw_tbl, overwrite=True)
+        table = Table.read(images_raw_tbl, format='ascii.ipac')
+        table_filtered = table[table['hdu'] == hdu]
+        table_filtered.write(images_raw_tbl, format='ascii.ipac')
         m.mProjExec(images_raw_tbl, header_hdr, projected_dir, stats_tbl,
                     raw_dir=raw_dir, mpi=mpi, n_proc=n_proc, exact=exact_size)
 
