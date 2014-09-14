@@ -1,3 +1,4 @@
+import atexit
 import os
 import glob
 import shutil as sh
@@ -408,7 +409,7 @@ def mosaic(input_dir, output_dir, header=None, image_table=None, mpi=False,
         Whether the output mosaic should match the input header exactly, or
         whether the mosaic should be trimmed if possible.
 
-    clenup : bool, optional
+    cleanup : bool, optional
         Whether to remove any temporary directories used for mosaicking
 
     bitpix : int, optional
@@ -452,7 +453,19 @@ def mosaic(input_dir, output_dir, header=None, image_table=None, mpi=False,
             raise Exception("Work directory already exists")
         os.mkdir(work_dir)
     else:
-        work_dir = tempfile.mkdtemp()
+        # Use a temporary directory such as 'montage_mosaic_ngc2264_EdJyrj',
+        # where 'ngc2264' would be here determined by the input directory.
+        basename = os.path.basename(os.path.normpath(input_dir))
+        prefix = "montage_mosaic_{0}_".format(basename)
+        work_dir = tempfile.mkdtemp(prefix=prefix)
+
+    # Make sure the working directory is cleaned up even when something goes
+    # wrong (or Ctrl-C is pressed, raising the KeyboardInterrupt exception)
+    @atexit.register
+    def cleanup_workdir():
+        """ Run _finalize() if necessary """
+        if os.path.exists(work_dir):
+            _finalize(cleanup, work_dir)
 
     images_raw_all_tbl = os.path.join(work_dir, 'images_raw_all.tbl')
     images_raw_tbl = os.path.join(work_dir, 'images_raw.tbl')
