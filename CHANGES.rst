@@ -1,8 +1,17 @@
 0.9.8 (unreleased)
 ------------------
 
-- Added wrapper for mTileImage command
+- Added wrapper for mTileImage command. [#14]
 
+- Fix typo in name of mFixNaN command. [#16]
+
+- Ensure that reproject_hdu cleans up any temporary directories. [#17]
+
+- Make sure that temporary directories created by mosaic() are always removed. [#19]
+
+- The code base is now fully Python 2 and 3 compatible, and 2to3 is no longer used. [#20]
+
+- Use the astropy-helpers package. [#21]
 
 0.9.7 (2013-11-02)
 ------------------
