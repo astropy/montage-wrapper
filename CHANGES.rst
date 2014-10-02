@@ -1,7 +1,8 @@
 0.9.9 (unreleased)
 ------------------
 
-- No changes yet
+- Fix bug that caused drizzle factor to be ignored in reproject, reproject_hdu,
+  and reproject_cube.
 
 0.9.8 (2014-09-14)
 ------------------

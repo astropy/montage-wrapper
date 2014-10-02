@@ -347,7 +347,7 @@ def reproject(in_images, out_images, header=None, bitpix=None,
         os.mkdir(os.path.join(final_dir, '%i' % i))
 
         mProject_auto(in_images[i], os.path.join(final_dir, '%i' % i, 'image_tmp.fits'),
-                      header_hdr, hdu=hdu)
+                      header_hdr, hdu=hdu, factor=factor)
 
         if exact_size:
             m.mImgtbl(os.path.join(final_dir, '%i' % i), images_tmp_tbl, corners=True)
