@@ -78,17 +78,17 @@ or, for clarity::
 All Montage commands (except ``mJPEG``, ``mMakeImg``, and ``mTileImage``)
 are accessible via Python functions. For example, to access ``mProject``, use::
 
-    >>> montage.mProject(...)
+    >>> montage.mProject(...)  # doctest: +SKIP
 
 and see :func:`~montage_wrapper.commands.mProject` for available options. Each
 Montage command returns a :class:`~montage_wrapper.status.Struct` object that
 contains information/diagnostics. The following example shows how to use the
 Montage command wrappers, and how to access the diagnostics::
 
-    >>> montage.mArchiveList('2MASS', 'K', 'm31', 0.5, 0.5, 'm31_list.tbl')
+    >>> montage.mArchiveList('2MASS', 'K', 'm31', 0.5, 0.5, 'm31_list.tbl')  # doctest: +SKIP
     count : 18
     stat : OK
-    >>> montage.mMakeHdr('m31_list.tbl', 'header.hdr', north_aligned=True)
+    >>> montage.mMakeHdr('m31_list.tbl', 'header.hdr', north_aligned=True)  # doctest: +SKIP
     count : 18
     lat4 : 41.744136
     stat : OK
@@ -104,10 +104,10 @@ Montage command wrappers, and how to access the diagnostics::
     clat : 41.32951
     lon2 : 10.168464
     lon3 : 10.161403
-    >>> s = montage.mMakeHdr('m31_list.tbl', 'header.hdr', north_aligned=True)
-    >>> s.stat
+    >>> s = montage.mMakeHdr('m31_list.tbl', 'header.hdr', north_aligned=True)  # doctest: +SKIP
+    >>> s.stat  # doctest: +SKIP
     'OK'
-    >>> s.lon1
+    >>> s.lon1  # doctest: +SKIP
     11.267467
 
 See `Reference/API`_ for a full list of available commands and documentation.
@@ -123,7 +123,7 @@ In addition to wrappers to the individual Montage commands, the following high-l
 
 For example, to mosaic all FITS files in a directory called `raw` using background matching, use:
 
-    >>> montage.mosaic('raw', 'mosaic', background_match=True)
+    >>> montage.mosaic('raw', 'mosaic', background_match=True)  # doctest: +SKIP
 
 In this specific example, a mosaic header will automatically be constructed
 from the input files.

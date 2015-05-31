@@ -50,9 +50,9 @@ class TestMosaic(object):
         assert hdu.data.shape == (288, 282)
         valid = hdu.data[~np.isnan(hdu.data)]
         assert len(valid) == 65029
-        assert_allclose(np.std(valid), 0.12658458001333581)
-        assert_allclose(np.mean(valid), 0.4995945318627074)
-        assert_allclose(np.median(valid), 0.5003376603126526)
+        assert_allclose(np.std(valid), 0.12658458001333581, rtol=5e-6)
+        assert_allclose(np.mean(valid), 0.4995945318627074, rtol=5e-6)
+        assert_allclose(np.median(valid), 0.5003376603126526, rtol=5e-6)
 
     @pytest.mark.xfail()  # results are not consistent on different machines
     def test_mosaic_background_match(self):
