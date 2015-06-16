@@ -418,7 +418,7 @@ def mosaic(input_dir, output_dir, header=None, image_table=None, mpi=False,
         Whether to remove any temporary directories used for mosaicking
 
     bitpix : int, optional
-        BITPIX value for the ouput FITS file (default is -64). Possible
+        BITPIX value for the ouput FITS file (default is -32). Possible
         values are: 8 (character or unsigned binary integer), 16 (16-bit
         integer), 32 (32-bit integer), -32 (single precision floating
         point), -64 (double precision floating point).
