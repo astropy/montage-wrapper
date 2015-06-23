@@ -42,7 +42,7 @@ def mAdd(images_table, template_header, out_image, img_dir=None,
 
     type : str, optional
         Select type of averaging to be done on accumulated pixel values
-        (either mean or median). To generate a map showing counts of how man_y
+        (either mean or median). To generate a map showing counts of how many
         times each pixel was overlapped by the input images, use count.
 
     exact : bool, optional
@@ -391,7 +391,7 @@ def mBackground_tab(in_image, out_image, images_table, corrections_table,
     return status.parse_struct("mBackground_tab", p.stdout.read().strip())
 
 
-def mBestImage(images_table, ra, dec, debug_level=None):
+def mBestImage(images_table, ra, dec, debug=False):
     '''
     Given a list of images and a position on the sky, determine which image
     covers the location "best" (i.e., the one where the position is farthest
@@ -413,8 +413,8 @@ def mBestImage(images_table, ra, dec, debug_level=None):
         Turn on debugging to the specified level (1 or 2)
     '''
     command = "mBestImage"
-    if debug_level:
-        command += " -d %s" % str(debug_level)
+    if debug:
+        command += " -d"
     command += " " + str(images_table)
     command += " " + str(ra)
     command += " " + str(dec)
@@ -836,7 +836,7 @@ def mDiffFitExec(diffs_table, fits_table, diff_dir, debug=False,
 
 
 def mExec(survey, band, raw_dir=None, n_tile_x=None, n_tile_y=None,
-          level_only=False, keep=False, corners=False, output_image=None,
+          level_only=False, keep=False, remove=False, output_image=None,
           debug_level=None, region_header=None, header=None,
           workspace_dir=None):
     '''
@@ -874,7 +874,7 @@ def mExec(survey, band, raw_dir=None, n_tile_x=None, n_tile_y=None,
         this option, raw data will be deleted (unless it was provided by the
         user with the "-r" option).
 
-    corners : bool, optional
+    remove : bool, optional
         Remove all temporary files and intermediate data products. Note: if
         not using the '-o' option to specify an output file, this will also
         remove mosaic_image.
@@ -909,7 +909,7 @@ def mExec(survey, band, raw_dir=None, n_tile_x=None, n_tile_y=None,
         command += " -l"
     if keep:
         command += " -k"
-    if corners:
+    if remove:
         command += " -c"
     if output_image:
         command += " -o %s" % str(output_image)
@@ -1042,7 +1042,7 @@ def mFixNaN(in_image, out_image, debug_level=None, nan_value=None,
         Turn on debugging to the specified level (1-3)
 
     nan_value : float, optional
-        Value to use in place of an_y NaNs
+        Value to use in place of any NaNs
 
     min_blank, max_blank : str, optional
         If the nan_value option is not used, mFixNaN will replace all pixel
@@ -1287,7 +1287,7 @@ def mHdrtbl(directory, images_table, recursive=False, corners=False,
 
     img_list : str, optional
         mHdrtbl will only process files with names specified in table
-        img_list, ignoring an_y other files in the directory.
+        img_list, ignoring any other files in the directory.
     '''
     command = "mHdrtbl"
     if recursive:
@@ -1375,7 +1375,7 @@ def mImgtbl(directory, images_table, recursive=False, corners=False,
 
     img_list : str, optional
         mImgtbl will only process files with names specified in table
-        img_list, ignoring an_y other files in the directory.
+        img_list, ignoring any other files in the directory.
     '''
     command = "mImgtbl"
     if recursive:
