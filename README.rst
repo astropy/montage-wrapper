@@ -9,7 +9,7 @@ high-level functions to facilitate mosaicking and re-projecting.
     :target: http://www.astropy.org
     :alt: Powered by Astropy Badge
 
-.. image:: https://travis-ci.org/astropy/montage-wrapper.png?branch=master
+.. image:: https://travis-ci.org/astropy/montage-wrapper.svg?branch=master
   :target: https://travis-ci.org/astropy/montage-wrapper
 
 .. image:: https://coveralls.io/repos/astropy/montage-wrapper/badge.svg
