@@ -24,6 +24,13 @@ if not _ASTROPY_SETUP_:
             installed = True
             break
 
+    # Check for Windows installation of Montage
+    if not installed:
+        for dir in os.environ['PATH'].split(';'):
+            if os.path.exists(dir + '/mProject.exe'):
+                installed = True
+                break
+
     import textwrap
 
     error_wrap = textwrap.TextWrapper(initial_indent=" " * 11,
