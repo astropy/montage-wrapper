@@ -46,21 +46,23 @@ class TestMosaic(object):
 
     def test_mosaic(self):
         mosaic(os.path.join(self.tmpdir, 'raw'),os.path.join(self.tmpdir, 'mosaic'), hdu=0)
-        hdu = fits.open(os.path.join(self.tmpdir, 'mosaic', 'mosaic.fits'))[0]
-        assert hdu.data.shape == (288, 282)
-        valid = hdu.data[~np.isnan(hdu.data)]
-        assert len(valid) == 65029
-        assert_allclose(np.std(valid), 0.12658458001333581, rtol=5e-6)
-        assert_allclose(np.mean(valid), 0.4995945318627074, rtol=5e-6)
-        assert_allclose(np.median(valid), 0.5003376603126526, rtol=5e-6)
+        with fits.open(os.path.join(self.tmpdir, 'mosaic', 'mosaic.fits')) as hdulist:
+            hdu = hdulist[0]
+            assert hdu.data.shape == (288, 282)
+            valid = hdu.data[~np.isnan(hdu.data)]
+            assert len(valid) == 65029
+            assert_allclose(np.std(valid), 0.12658458001333581, rtol=5e-6)
+            assert_allclose(np.mean(valid), 0.4995945318627074, rtol=5e-6)
+            assert_allclose(np.median(valid), 0.5003376603126526, rtol=5e-6)
 
     def test_mosaic_background_match(self):
         mosaic(os.path.join(self.tmpdir, 'raw'),os.path.join(self.tmpdir, 'mosaic_bkgmatch'), background_match=True)
         # results are not consistent on different machines so can't compare
-        # hdu = fits.open(os.path.join(self.tmpdir, 'mosaic_bkgmatch', 'mosaic.fits'))[0]
-        # assert hdu.data.shape == (288, 282)
-        # valid = hdu.data[~np.isnan(hdu.data)]
-        # assert len(valid) == 65029
-        # assert_allclose(np.std(valid), 0.12661606622654725)
-        # assert_allclose(np.mean(valid), 0.4994805202294361)
-        # assert_allclose(np.median(valid), 0.5002447366714478)
+        # with fits.open(os.path.join(self.tmpdir, 'mosaic_bkgmatch', 'mosaic.fits'))[0] as hdulist:
+        #     hdu = hdulist[0]
+        #     assert hdu.data.shape == (288, 282)
+        #     valid = hdu.data[~np.isnan(hdu.data)]
+        #     assert len(valid) == 65029
+        #     assert_allclose(np.std(valid), 0.12661606622654725)
+        #     assert_allclose(np.mean(valid), 0.4994805202294361)
+        #     assert_allclose(np.median(valid), 0.5002447366714478)
