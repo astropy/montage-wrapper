@@ -5,7 +5,7 @@ This package provides a python wrapper to the Montage Astronomical Image Mosaic
 Engine, including both functions to access individual Montage commands, and
 high-level functions to facilitate mosaicking and re-projecting.
 
-Installation and usage instructions are available at [http://www.astropy.org/montage-wrapper/](http://www.astropy.org/montage-wrapper/).
+Installation and usage instructions are available at http://www.astropy.org/montage-wrapper/
 
 .. image:: http://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
     :target: http://www.astropy.org
