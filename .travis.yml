@@ -76,7 +76,7 @@ matrix:
 install:
     # Installing python dependencies with conda
     - git clone git://github.com/astropy/ci-helpers.git
-    - source ci-helpers/travis/setup_conda_$TRAVIS_OS_NAME.sh
+    - source ci-helpers/travis/setup_conda.sh
 
     # Build Montage from source
     - wget http://montage.ipac.caltech.edu/download/Montage_v3.3.tar.gz
