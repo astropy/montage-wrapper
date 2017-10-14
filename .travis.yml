@@ -41,10 +41,8 @@ matrix:
           env: SETUP_CMD='build_sphinx -w'
 
         # Try Astropy development version
-        - python: 2.7
-          env: ASTROPY_VERSION=development SETUP_CMD='test --coverage'
         - python: 3.5
-          env: ASTROPY_VERSION=development
+          env: ASTROPY_VERSION=development SETUP_CMD='test --coverage'
         - python: 2.7
           env: ASTROPY_VERSION=lts CONDA_CHANNELS=astropy-ci-extras
         - python: 3.5
