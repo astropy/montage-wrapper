@@ -1,7 +1,7 @@
 NOT MAINTAINED
 ==============
 
-This package is no longer maintained and the repository is archived.
+This package is no longer maintained and the repository is archived. If anyone wants to consider bringing it back (and maintaining it) feel free to fork and/opr bring the topic up in astropy/project or other astropy discussion venues.
 
 
 About
