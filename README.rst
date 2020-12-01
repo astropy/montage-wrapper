@@ -1,3 +1,9 @@
+NOT MAINTAINED
+==============
+
+This package is no longer maintained and the repository is archived.
+
+
 About
 =====
 
